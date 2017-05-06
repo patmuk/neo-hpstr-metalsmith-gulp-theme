@@ -1,29 +1,39 @@
 'use strict';
+const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production');
 
-const Metalsmith         = require('metalsmith');
-const lunr               = require('metalsmith-lunr');
-const prism              = require('metalsmith-prism');
-const drafts             = require('metalsmith-drafts');
-const assets             = require('metalsmith-assets');
-const inspect            = require('metalsmith-inspect');
-const layouts            = require('metalsmith-layouts');
-const inPlace            = require('metalsmith-in-place');
-const paginate           = require('metalsmith-paginate');
-const gravatar           = require('metalsmith-gravatar');
-const excerpts           = require('metalsmith-excerpts');
-const redirect           = require('metalsmith-redirect');
-const permalinks         = require('metalsmith-permalinks');
-const collections        = require('metalsmith-collections');
-const discoverHelpers    = require('metalsmith-discover-helpers');
-const discoverPartials   = require('metalsmith-discover-partials');
-const markdownRemarkable = require('metalsmith-markdown-remarkable');
+var metalsmith         = require('metalsmith');
+const
+lunr               = require('metalsmith-lunr'),
+prism              = require('metalsmith-prism'),
+drafts             = require('metalsmith-drafts'),
+assets             = require('metalsmith-assets'),
+inspect            = require('metalsmith-inspect'),
+layouts            = require('metalsmith-layouts'),
+inPlace            = require('metalsmith-in-place'),
+paginate           = require('metalsmith-paginate'),
+gravatar           = require('metalsmith-gravatar'),
+excerpts           = require('metalsmith-excerpts'),
+redirect           = require('metalsmith-redirect'),
+permalinks         = require('metalsmith-permalinks'),
+collections        = require('metalsmith-collections'),
+discoverHelpers    = require('metalsmith-discover-helpers'),
+discoverPartials   = require('metalsmith-discover-partials'),
+markdownRemarkable = require('metalsmith-markdown-remarkable'),
+remarkableEmoji    = require('remarkable-emoji'),
+remarkableMentions = require('remarkable-mentions'),
+striptags          = require('striptags'),
+{TfIdf}            = require('natural'),
+htmlmin     = devBuild ? null : require('metalsmith-html-minifier'),
+browsersync = devBuild ? require('metalsmith-browser-sync') : null;
 
-const remarkableEmoji    = require('remarkable-emoji');
-const remarkableMentions = require('remarkable-mentions');
-
-const striptags          = require('striptags');
-
-const {TfIdf}            = require('natural');
+const dir = {
+  base:   __dirname + '/',
+  lib:    __dirname + '/lib/',
+  source: '.',
+  dest:   './public/'
+//  source: './src/',
+//  dest:   './build/'
+}
 
 function relations(options) {
   options = Object.assign({
@@ -84,13 +94,13 @@ function relations(options) {
 
 console.log('ENV:', process.env.NODE_ENV || 'development');
 
-Metalsmith(__dirname)
+var ms = metalsmith(__dirname)
 .metadata({
   site: {
     // Site Info
     title: "Blog Title",
     description: "Describe your website here.",
-    url: process.env.NODE_ENV === 'production' ? "http://peden.software/neo-hpstr-metalsmith-theme" : 'http://localhost:8080',
+//    url: process.env.NODE_ENV === 'production' ? "http://peden.software/neo-hpstr-metalsmith-theme" : 'http://localhost:8080',
 
     reading_time: true,
     words_per_minute: 200,
@@ -180,9 +190,9 @@ Metalsmith(__dirname)
   includeMetalsmith: true,
   exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
 }))
-.source('./content')
+.source(dir.source+'/content')
 .destination('./public')
-.clean(true)
+.clean(!devBuild)
 .use(drafts())
 .use(collections({
   posts: {
@@ -246,8 +256,14 @@ Metalsmith(__dirname)
 // }))
 .use(assets({
   source: './assets',
-}))
-.build((error, files) => {
+}));
+
+if (browsersync) ms.use(browsersync({     // start test server
+  server: dir.dest,
+  files:  [dir.source + '**/*']
+}));
+
+ms.build((error, files) => {
   if(error) {
     throw error;
   }
