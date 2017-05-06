@@ -1,4 +1,6 @@
 'use strict';
+
+process.env.DEBUG = 'metalsmith:destination metalsmith';
 const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production');
 
 var metalsmith         = require('metalsmith');
@@ -24,7 +26,8 @@ remarkableMentions = require('remarkable-mentions'),
 striptags          = require('striptags'),
 {TfIdf}            = require('natural'),
 htmlmin     = devBuild ? null : require('metalsmith-html-minifier'),
-browsersync = devBuild ? require('metalsmith-browser-sync') : null;
+browsersync = devBuild ? require('metalsmith-browser-sync') : null,
+debug = devBuild ? require('metalsmith-debug') : null;
 
 const dir = {
   base:   __dirname + '/',
@@ -184,8 +187,10 @@ var ms = metalsmith(__dirname)
       }],
     },
   },
-})
-.use(inspect({
+});
+
+if (devBuild) ms.use(debug());
+ms.use(inspect({
   disable: true,
   includeMetalsmith: true,
   exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
