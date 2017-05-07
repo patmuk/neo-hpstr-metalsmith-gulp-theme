@@ -48,5 +48,8 @@
     "remarkable-emoji": "^0.1.3",
     "remarkable-mentions": "^0.1.0",
     "striptags": "^3.0.1"
+  },
+  "devDependencies": {
+    "gulp-debug": "^2.1.2"
   }
 }

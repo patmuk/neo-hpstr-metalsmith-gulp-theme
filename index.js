@@ -1,6 +1,7 @@
 'use strict';
 
 process.env.DEBUG = 'metalsmith:destination metalsmith';
+
 const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production');
 
 var metalsmith         = require('metalsmith');
@@ -27,15 +28,17 @@ striptags          = require('striptags'),
 {TfIdf}            = require('natural'),
 htmlmin     = devBuild ? null : require('metalsmith-html-minifier'),
 browsersync = devBuild ? require('metalsmith-browser-sync') : null,
-debug = devBuild ? require('metalsmith-debug') : null;
+debug = devBuild ? require('metalsmith-debug') : null,
+//sass = require('gulp-sass'),
+//gulp = require('gulp'),
+//gulpsmith = require('gulpsmith'),
+sass = require('metalsmith-sass');
 
 const dir = {
   base:   __dirname + '/',
   lib:    __dirname + '/lib/',
-  source: '.',
-  dest:   './public/'
-//  source: './src/',
-//  dest:   './build/'
+  source: './src',
+  dest:   './build'
 }
 
 function relations(options) {
@@ -190,13 +193,29 @@ var ms = metalsmith(__dirname)
 });
 
 if (devBuild) ms.use(debug());
-ms.use(inspect({
+ms
+.use(sass())/*{
+//  file: dir.src+'/sass/main.scss',
+  file: './src/sass/main.scss',
+  outputDir: dir.dest+'/stylesheets',
+  outputStyle: 'expanded'
+}))
+/*.source(dir.source+'/sass/main.scss')
+.use(gulpsmith
+//  .pipe(gulp.src(dir.source+'/sass/main.scss'))
+  .pipe(sass({
+    outputStyle: 'expanded',
+  }).on('error', sass.logError))
+//  .pipe(gulp.dest(dir.dist+'/assets/stylesheets/'));
+//  .pipe(gulp.dest(dir.dest+'/stylesheets/'))
+)*/
+.use(inspect({
   disable: true,
   includeMetalsmith: true,
   exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
 }))
 .source(dir.source+'/content')
-.destination('./public')
+.destination(dir.dest)
 .clean(!devBuild)
 .use(drafts())
 .use(collections({
@@ -239,12 +258,17 @@ ms.use(inspect({
 .use(paginate({
   path: 'page',
 }))
-.use(discoverHelpers())
-.use(discoverPartials())
+.use(discoverHelpers({
+    directory: dir.source+'/helpers'
+  }))
+.use(discoverPartials({
+    directory: dir.source+'/partials'
+  }))
 .use(inPlace())
 .use(layouts({
   engine: 'handlebars',
   default: 'page.html',
+  directory: dir.source+'/layouts',
 }))
 .use(lunr({
   ref: 'path',
@@ -260,12 +284,12 @@ ms.use(inspect({
 //   '/old/path': '/new/path',
 // }))
 .use(assets({
-  source: './assets',
+  source: dir.source+'/assets',
 }));
 
 if (browsersync) ms.use(browsersync({     // start test server
   server: dir.dest,
-  files:  [dir.source + '**/*']
+  files:  [dir.source + '/**/*']
 }));
 
 ms.build((error, files) => {

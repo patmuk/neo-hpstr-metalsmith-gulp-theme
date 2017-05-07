@@ -23,6 +23,7 @@ Neo-HPSTR Metalsmith is a responsive and modern blog template based on [Neo-HPST
 1. Clone the fork locally (`git clone git@github.com:username/reponame.git`)
 1. Delete the stock posts and images
 1. Install NPM modules (`npm install`)
+1. compile sass with `gulp sass`
 1. Build into `/public` (`node .`)
 1. Make it your own!
 
