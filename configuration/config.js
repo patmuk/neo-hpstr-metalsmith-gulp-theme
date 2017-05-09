@@ -14,8 +14,11 @@ module.exports = {
     src: rootdir + '/{src,layouts,configuration}/**/*'
   },
   browserSync: {
-      // start test server
-      server: rootdir + '/build',
-      files:  [rootdir + '/src/**/*']
-    }
-  };
+    // start test server
+    server: rootdir + '/build',
+    files:  [rootdir + '/src/**/*']
+  },
+  publish: {
+    ghPagesRepo: 'https://github.com/patmuk/patmuk.github.io.git'
+  }
+};
