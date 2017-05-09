@@ -1,38 +1,34 @@
 'use strict';
-
+//config
 process.env.DEBUG = 'metalsmith:destination metalsmith';
+const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
+      debug = devBuild ? require('metalsmith-debug') : null;
 
-const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production');
-
-var metalsmith         = require('metalsmith');
+const metalsmith         = require('metalsmith');
 const
-lunr               = require('metalsmith-lunr'),
-prism              = require('metalsmith-prism'),
-drafts             = require('metalsmith-drafts'),
-assets             = require('metalsmith-assets'),
-inspect            = require('metalsmith-inspect'),
-layouts            = require('metalsmith-layouts'),
-inPlace            = require('metalsmith-in-place'),
-paginate           = require('metalsmith-paginate'),
-gravatar           = require('metalsmith-gravatar'),
-excerpts           = require('metalsmith-excerpts'),
-redirect           = require('metalsmith-redirect'),
-permalinks         = require('metalsmith-permalinks'),
-collections        = require('metalsmith-collections'),
-discoverHelpers    = require('metalsmith-discover-helpers'),
-discoverPartials   = require('metalsmith-discover-partials'),
-markdownRemarkable = require('metalsmith-markdown-remarkable'),
-remarkableEmoji    = require('remarkable-emoji'),
-remarkableMentions = require('remarkable-mentions'),
-striptags          = require('striptags'),
-{TfIdf}            = require('natural'),
-htmlmin     = devBuild ? null : require('metalsmith-html-minifier'),
-browsersync = devBuild ? require('metalsmith-browser-sync') : null,
-debug = devBuild ? require('metalsmith-debug') : null,
-//sass = require('gulp-sass'),
-//gulp = require('gulp'),
-//gulpsmith = require('gulpsmith'),
-sass = require('metalsmith-sass');
+//metalsmith-plugins
+      assets             = require('metalsmith-assets'),
+      collections        = require('metalsmith-collections'),
+      discoverHelpers    = require('metalsmith-discover-helpers'),
+      discoverPartials   = require('metalsmith-discover-partials'),
+      drafts             = require('metalsmith-drafts'),
+      excerpts           = require('metalsmith-excerpts'),
+      gravatar           = require('metalsmith-gravatar'),
+      inPlace            = require('metalsmith-in-place'),
+      inspect            = require('metalsmith-inspect'),
+      layouts            = require('metalsmith-layouts'),
+      lunr               = require('metalsmith-lunr'),
+      markdownRemarkable = require('metalsmith-markdown-remarkable'),
+      paginate           = require('metalsmith-paginate'),
+      permalinks         = require('metalsmith-permalinks'),
+      prism              = require('metalsmith-prism'),
+      remarkableEmoji    = require('remarkable-emoji'),
+      remarkableMentions = require('remarkable-mentions'),
+      striptags          = require('striptags'),
+      {TfIdf}            = require('natural'),
+
+      browsersync = devBuild ? require('metalsmith-browser-sync') : null,
+      sass = require('metalsmith-sass');
 
 const dir = {
   base:   __dirname + '/',
@@ -194,28 +190,14 @@ var ms = metalsmith(__dirname)
 
 if (devBuild) ms.use(debug());
 ms
-.use(sass())/*{
-//  file: dir.src+'/sass/main.scss',
-  file: './src/sass/main.scss',
-  outputDir: dir.dest+'/stylesheets',
-  outputStyle: 'expanded'
-}))
-/*.source(dir.source+'/sass/main.scss')
-.use(gulpsmith
-//  .pipe(gulp.src(dir.source+'/sass/main.scss'))
-  .pipe(sass({
-    outputStyle: 'expanded',
-  }).on('error', sass.logError))
-//  .pipe(gulp.dest(dir.dist+'/assets/stylesheets/'));
-//  .pipe(gulp.dest(dir.dest+'/stylesheets/'))
-)*/
+.source(dir.source+'/process')
+.destination(dir.dest)
+.use(sass())
 .use(inspect({
   disable: true,
   includeMetalsmith: true,
   exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
 }))
-.source(dir.source+'/content')
-.destination(dir.dest)
 .clean(!devBuild)
 .use(drafts())
 .use(collections({
@@ -269,6 +251,7 @@ ms
   engine: 'handlebars',
   default: 'page.html',
   directory: dir.source+'/layouts',
+  pattern: '**/*.html'
 }))
 .use(lunr({
   ref: 'path',
@@ -280,11 +263,9 @@ ms
   },
   preprocess: striptags
 }))
-// .use(redirect({
-//   '/old/path': '/new/path',
-// }))
 .use(assets({
   source: dir.source+'/assets',
+  destination: 'assets',
 }));
 
 if (browsersync) ms.use(browsersync({     // start test server

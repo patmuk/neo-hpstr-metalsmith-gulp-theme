@@ -1,43 +1,43 @@
+//config
 process.env.DEBUG = 'metalsmith:destination metalsmith';
-const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production');
+const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
+      debug = devBuild ? require('gulp-debug') : null,
+//      debug = devBuild ? require('metalsmith-debug') : null;
+      config = require('../config');
 
-const gulp = require('gulp'),
+const
+//gulp-metalsmith setup
+      gulp = require('gulp'),
       del = require('del'),
       fs = require('fs'),
-//      metalsmith = require('gulp-metalsmith'),
       gulpsmith = require('gulpsmith'),
-      sass = require('gulp-sass'),
-      debug = devBuild ? require('gulp-debug') : null,
-      //      debug = devBuild ? require('metalsmith-debug') : null;
       gulp_front_matter = require('gulp-front-matter'),
       assign = require('lodash.assign');
 
 
 const
-      lunr               = require('metalsmith-lunr'),
-      prism              = require('metalsmith-prism'),
-      drafts             = require('metalsmith-drafts'),
+//metalsmith-plugins
       assets             = require('metalsmith-assets'),
-      inspect            = require('metalsmith-inspect'),
-      layouts            = require('metalsmith-layouts'),
-      inPlace            = require('metalsmith-in-place'),
-      paginate           = require('metalsmith-paginate'),
-      gravatar           = require('metalsmith-gravatar'),
-      excerpts           = require('metalsmith-excerpts'),
-      redirect           = require('metalsmith-redirect'),
-      permalinks         = require('metalsmith-permalinks'),
       collections        = require('metalsmith-collections'),
       discoverHelpers    = require('metalsmith-discover-helpers'),
       discoverPartials   = require('metalsmith-discover-partials'),
+      drafts             = require('metalsmith-drafts'),
+      excerpts           = require('metalsmith-excerpts'),
+      gravatar           = require('metalsmith-gravatar'),
+      inPlace            = require('metalsmith-in-place'),
+      inspect            = require('metalsmith-inspect'),
+      layouts            = require('metalsmith-layouts'),
+      lunr               = require('metalsmith-lunr'),
       markdownRemarkable = require('metalsmith-markdown-remarkable'),
+      paginate           = require('metalsmith-paginate'),
+      permalinks         = require('metalsmith-permalinks'),
+      prism              = require('metalsmith-prism'),
       remarkableEmoji    = require('remarkable-emoji'),
       remarkableMentions = require('remarkable-mentions'),
       striptags          = require('striptags'),
       {TfIdf}            = require('natural'),
-      htmlmin     = devBuild ? null : require('metalsmith-html-minifier'),
-//      browsersync = devBuild ? require('metalsmith-browser-sync') : null;
-      browsersync = devBuild ? require('browser-sync') : null,
-      config = require('../config');
+//gulp-plugins
+      sass = require('gulp-sass');
 
 
 gulp.task('default', ['watch']);
@@ -51,10 +51,10 @@ gulp.task('watch', function () {
 });
 
 
-//gulp.task('metalsmith', ['clean'], function () {
-gulp.task('build-metalsmith', ['sass'], function () {
-  return gulp.src(config.metalsmith.src+'/content/**/*')
-    .pipe(debug({title: 'metalsmith:'}))
+gulp.task('build', ['sass'], function () {
+  return gulp
+  .src([config.metalsmith.src+'/process/**/*', '!'+config.metalsmith.src+'/process/assets/stylesheets/**/*.scss'])
+//    .pipe(debug({title: 'metalsmith:'}))
     .pipe(gulp_front_matter()).on("data", function(file) {
         assign(file, file.frontMatter);
         delete file.frontMatter;
@@ -217,11 +217,9 @@ gulp.task('build-metalsmith', ['sass'], function () {
             },
             preprocess: striptags
           }))
-        // .use(redirect({
-        //   '/old/path': '/new/path',
-        // }))
         .use(assets({
             source: config.metalsmith.src+'/assets',
+            destination: 'assets',
           }))
     )
     .pipe(gulp.dest(config.metalsmith.dest));
@@ -240,13 +238,12 @@ function preparePages(entries) {
 }
 
 gulp.task('sass', function() {
-  return gulp
-  .src(config.metalsmith.src+'/sass/main.scss')
+  return gulp.src(config.metalsmith.src+'/process/assets/stylesheets/**/*.scss')
+//  .src(config.metalsmith.src+'process/assets/stylesheets/**/*.scss')
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
-//  .pipe(gulp.dest(dir.dist+'/assets/stylesheets/'));
-  .pipe(gulp.dest(config.metalsmith.dest+'/stylesheets/'));
+  .pipe(gulp.dest(config.metalsmith.dest+'/assets/stylesheets/'));
 });
 
 gulp.task('sass:watch', function() {

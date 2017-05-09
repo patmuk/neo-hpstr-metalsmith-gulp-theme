@@ -32,7 +32,7 @@ Below is just about everything you'll need to style in the theme. Check the sour
 Lorem ipsum dolor sit amet, test link adipiscing elit. **This is strong**. Nullam dignissim convallis est. Quisque aliquam.
 
 <span class="image-right">
-![Smithsonian Image](/images/3953273590_704e3899d5_m.jpg)
+![Smithsonian Image](/assets/images/3953273590_704e3899d5_m.jpg)
 </span>
 
 *This is emphasized*. Donec faucibus. Nunc iaculis suscipit dui. 53 = 125. Water is H<sub>2</sub>O. Nam sit amet sem. Aliquam libero nisi, imperdiet at, tincidunt nec, gravida vehicula, nisl. The New York Times <cite>(That’s a citation)</cite>. <u>Underline</u>. Maecenas ornare tortor. Donec sed tellus eget sapien fringilla nonummy. Mauris a ante. Suspendisse quam sem, consequat at, commodo vitae, feugiat in, nunc. Morbi imperdiet augue quis tellus.
@@ -116,7 +116,7 @@ feature:
         url: <url of source>
 ```
 
-The image must be in the `/images` folder.
+The image must be in the `/assets/images` folder.
 
 ## @ Mentions
 @tjpeden

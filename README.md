@@ -23,8 +23,7 @@ Neo-HPSTR Metalsmith is a responsive and modern blog template based on [Neo-HPST
 1. Clone the fork locally (`git clone git@github.com:username/reponame.git`)
 1. Delete the stock posts and images
 1. Install NPM modules (`npm install`)
-1. compile sass with `gulp sass`
-1. Build into `/public` (`node .`)
+1. Build into `/build` with `node .` OR `gulp`
 1. Make it your own!
 
 NOTE: If you're going to serve this using GitHub Pages, be sure to enable GitHub Pages in your settings and select your desired source.
@@ -41,29 +40,50 @@ NOTE: If you're going to serve this using GitHub Pages, be sure to enable GitHub
 * [Syntax highlighting](#) to make your code examples look snazzy.
 * Author panel with social links.
 
+## gulp build
+`gulp` is the prefered way to build, as it is faster. Tasks are executed in parallel. Most metalsmith plugins are just wrapped gulp plugins.
+
+However, for compatibility reasons `node .` still works as well.
+
+### usage
+`gulp` to build the blog into `/build`, and start it in a browser window
+
+`gulp build` to just build the blog (to `build`)
+
+`gulp browser-sync` to build and view it in a browser window (same as `gulp`, but without cleaning the build directory first)
+
+`gulp clean` to clean the build-directory for a fresh rebuild
+
 ## Configuration
 
 Here are some tips on how to customize your blog theme. If you have questions, just open a new issue. :)
 
+Configure the bolg's metadata in either the index.js file (for 'nede .') or in the gulp/tasks/build.js file (for 'gulp').
+
 ### Project tree
 
-    ├── assets/
+├── LICENSE
+├── README.md
+├── gulpfile.js                     # main build file, using `gulp`
+├── index.js                        # main build file, using `node .`
+├── gulp                            # configuration and tasks for gulp
+│   ├── config.js                   # blog configuration
+│   └── tasks                       # individual gulp tasks
+│       ├── browser-sync.js         # view locally built blog in browser
+│       ├── build.js                # main task to build the blog
+│       └── watch.js                # rebuild on file changes
+├── package.json                    # package dependencies, install with `npm install`
+└── src                             # all sources needed for the build process
+    ├── assets                      # assets to be copied unprocessed to `/build`
     │   ├── fonts/                  # fonts (i.e. FontAwesome)
     │   ├── images/                 # images (i.e. logo, favicon, etc)
     │   ├── javascripts/            # third-party and page specific js
-    │   ├── stylesheets/            # css (compiled from /sass)
-    ├── content/
-    │   ├── _posts/                 # blog posts
-    │   ├── about/index.md          # about page
-    │   ├── posts/index.html.hbs    # archives page
-    │   ├── search/index.html.hbs   # search page
-    │   ├── 404.html.hbs            # 404 page
-    │   ├── index.html.hbs          # home page
+    │   ├── stylesheets/            # css (not compiled)
     ├── helpers/                    # handlebars helpers
     ├── layouts/                    # blog layouts
-    │   ├── home.html
-    │   ├── page.html
-    │   └── post.html
+    │   ├── home.html
+    │   ├── page.html
+    │   └── post.html
     ├── partials/
     │   ├── author.hbs              # author banner (at the end of post)
     │   ├── disqus-comments.hbs     # comments
@@ -75,12 +95,15 @@ Here are some tips on how to customize your blog theme. If you have questions, j
     │   ├── read-more.hbs           # read-more banner, to recommend posts
     │   ├── scripts.hbs             # js scripts
     │   └── social-share.hbs        # floating social share integration
-    ├── sass/                       # blog style
-    ├── Guplfile.js                 # some gupl tasks, useful for theme developing
-    ├── index.js                    # main config and process file
-    ├── LICENSE
-    ├── package.json
-    ├── README.md
+    └── process                     # files to process
+        ├── 404.html.hbs            # 404 page
+        ├── _posts                  # blog posts
+        ├── about/index.md          # about page
+        ├── assets/stylesheets      # blog style; scss to be compiled to /build/assets/stylesheets
+        ├── index.html.hbs          # home page
+        ├── posts/index.html.hbs    # archives page
+        └── search/index.html.hbs   # search page
+
 
 ## License
 
@@ -90,7 +113,7 @@ The theme is available as open source under the terms of the [MIT License][2].
 [2]: http://opensource.org/licenses/MIT
 [3]: https://badge.fury.io/gh/tjpeden%2Fneo-hpstr-metalsmith-theme.svg
 [4]: https://badge.fury.io/gh/tjpeden%2Fneo-hpstr-metalsmith-theme
-[5]: /assets/images/neo-hpstr-metalsmith-theme.png?raw=true
+[5]: /src/assets/images/neo-hpstr-metalsmith-theme.png?raw=true
 [6]: http://peden.software/neo-hpstr-metalsmith-theme
 [7]: https://github.com/tjpeden/neo-hpstr-metalsmith-theme
 [8]: http://disqus.com
