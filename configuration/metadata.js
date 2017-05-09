@@ -2,8 +2,8 @@
 module.exports = {
   site: {
     // Site Info
-    title: "Blog Title",
-    description: "Describe your website here.",
+    title: "Patrick Mukherjee",
+    description: "Dr.-Ing.",
 //    url: process.env.NODE_ENV === 'production' ? "http://peden.software/neo-hpstr-metalsmith-theme" : 'http://localhost:8080',
 
     reading_time: true,
@@ -13,7 +13,7 @@ module.exports = {
     google_analytics: '',
 
     // Site Locale Info
-    timezone: 'America/Chicago',
+    timezone: 'Germany/Berlin',
     locale: 'en_US',
 
     // Site Menu
@@ -52,39 +52,39 @@ module.exports = {
 
     // Owner Info
     owner: {
-      name: "Your name",
-      url: "http://peden.software",
+      name: "Patrick Mukherjee",
+      url: "http://patrick.mukherjee.de",
       bio: "Your bio goes here. It shouldn't be super long, but a good couple of sentences should suffice.",
-      email: "you@email.com",
-      twitter: 'tjpeden',
+      email: "patrick@mukherjee.de",
+      twitter: 'patmuk',
       networks: [{
         name: 'GitHub',
         icon: 'github-alt',
-        url: "https://github.com/tjpeden",
+        url: "https://github.com/patmuk",
       }, {
         name: 'CodePen',
         icon: 'codepen',
-        url: "http://codepen.io/tjpeden/",
+        url: "http://codepen.io/patmuk/",
       }, {
         name: 'Facebook',
         icon: 'facebook-official',
-        url: "https://www.facebook.com/tj.peden",
+        url: "https://www.facebook.com/patrick.mukherjee",
       }, {
         name: 'Twitter',
         icon: 'twitter',
-        url: "https://twitter.com/tjpeden",
+        url: "https://twitter.com/patmuk",
       }, {
         name: 'LinkedIn',
         icon: 'linkedin',
-        url: "https://www.linkedin.com/in/tjpeden",
+        url: "https://www.linkedin.com/in/patrick.mukherjee",
       }, {
         name: 'YouTube',
         icon: 'youtube-play',
-        url: "https://www.youtube.com/TheTJPeden",
+        url: "https://www.youtube.com/patmuk",
       }, {
         name: 'Twitch',
         icon: 'twitch',
-        url: "https://www.twitch.tv/tjpeden",
+        url: "https://www.twitch.tv/patmuk",
       }],
     },
   }
