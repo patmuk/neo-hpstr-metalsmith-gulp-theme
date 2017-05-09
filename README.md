@@ -58,7 +58,7 @@ However, for compatibility reasons `node .` still works as well.
 
 Here are some tips on how to customize your blog theme. If you have questions, just open a new issue. :)
 
-Configure the bolg's metadata in either the index.js file (for 'nede .') or in the gulp/tasks/build.js file (for 'gulp').
+Configure the bolg's metadata in ./configuration/metadata.js file.
 
 ### Project tree
 
@@ -66,6 +66,9 @@ Configure the bolg's metadata in either the index.js file (for 'nede .') or in t
 ├── README.md
 ├── gulpfile.js                     # main build file, using `gulp`
 ├── index.js                        # main build file, using `node .`
+├──configuration/                   # configuration for the blog
+    ├── config.js                   # build configuration
+    └── metadata.js                 # blog metadata
 ├── gulp                            # configuration and tasks for gulp
 │   ├── config.js                   # blog configuration
 │   └── tasks                       # individual gulp tasks

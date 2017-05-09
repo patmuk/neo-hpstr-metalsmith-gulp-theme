@@ -3,7 +3,8 @@ process.env.DEBUG = 'metalsmith:destination metalsmith';
 const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
       debug = devBuild ? require('gulp-debug') : null,
 //      debug = devBuild ? require('metalsmith-debug') : null;
-      config = require('../config');
+      config = require('../../configuration/config');
+      metadata = require(config.dir.config+'/metadata');
 
 const
 //gulp-metalsmith setup
@@ -43,113 +44,25 @@ const
 gulp.task('default', ['watch']);
 
 gulp.task('clean', function () {
-  del(config.metalsmith.dest+'/**');
+  del(config.dir.dest+'/**');
 });
 
 gulp.task('watch', function () {
-  gulp.watch(config.metalsmith.src+'/**', ['metalsmith-json']);
+  gulp.watch(config.dir.src+'/**', ['metalsmith-json']);
 });
 
 
 gulp.task('build', ['sass'], function () {
   return gulp
-  .src([config.metalsmith.src+'/process/**/*', '!'+config.metalsmith.src+'/process/assets/stylesheets/**/*.scss'])
+  .src([config.dir.src+'/process/**/*', '!'+config.dir.src+'/process/assets/stylesheets/**/*.scss'])
 //    .pipe(debug({title: 'metalsmith:'}))
     .pipe(gulp_front_matter()).on("data", function(file) {
         assign(file, file.frontMatter);
         delete file.frontMatter;
     })
     .pipe(
-        gulpsmith(config.metalsmith.dir)
-        .metadata({
-          site: {
-            // Site Info
-            title: "Blog Title",
-            description: "Describe your website here.",
-        //    url: process.env.NODE_ENV === 'production' ? "http://peden.software/neo-hpstr-metalsmith-theme" : 'http://localhost:8080',
-
-            reading_time: true,
-            words_per_minute: 200,
-
-            disqus: '',
-            google_analytics: '',
-
-            // Site Locale Info
-            timezone: 'America/Chicago',
-            locale: 'en_US',
-
-            // Site Menu
-            menu: [{
-              title: 'GitHub',
-              url: '#',
-              submenu: [{
-                title: 'Install',
-                url: "https://github.com/tjpeden/neo-hpstr-metalsmith-theme#installation",
-              }, {
-                title: 'Fork',
-                url: "https://github.com/tjpeden/neo-hpstr-metalsmith-theme",
-              }]
-            }, {
-              title: 'About',
-              url: '/about',
-            }, {
-              title: 'Archive',
-              url: '/posts',
-            }, {
-              title: 'Home',
-              url: '/',
-            }],
-
-            // Generator Info
-            generator: {
-              name: 'Matalsmith',
-              url: "http://www.metalsmith.io/",
-            },
-
-            // Theme Info
-            theme: {
-              name: 'Neo-HPSTR Metalsmith Theme',
-              url: "https://github.com/tjpeden/neo-hpstr-metalsmith-theme",
-            },
-
-            // Owner Info
-            owner: {
-              name: "Your name",
-              url: "http://peden.software",
-              bio: "Your bio goes here. It shouldn't be super long, but a good couple of sentences should suffice.",
-              email: "you@email.com",
-              twitter: 'tjpeden',
-              networks: [{
-                name: 'GitHub',
-                icon: 'github-alt',
-                url: "https://github.com/tjpeden",
-              }, {
-                name: 'CodePen',
-                icon: 'codepen',
-                url: "http://codepen.io/tjpeden/",
-              }, {
-                name: 'Facebook',
-                icon: 'facebook-official',
-                url: "https://www.facebook.com/tj.peden",
-              }, {
-                name: 'Twitter',
-                icon: 'twitter',
-                url: "https://twitter.com/tjpeden",
-              }, {
-                name: 'LinkedIn',
-                icon: 'linkedin',
-                url: "https://www.linkedin.com/in/tjpeden",
-              }, {
-                name: 'YouTube',
-                icon: 'youtube-play',
-                url: "https://www.youtube.com/TheTJPeden",
-              }, {
-                name: 'Twitch',
-                icon: 'twitch',
-                url: "https://www.twitch.tv/tjpeden",
-              }],
-            },
-          }})
+        gulpsmith(config.dir.base)
+        .metadata(metadata)
         .use(inspect({
               disable: true,
               includeMetalsmith: true,
@@ -196,16 +109,16 @@ gulp.task('build', ['sass'], function () {
             path: 'page',
           }))
         .use(discoverHelpers({
-            directory: config.metalsmith.src+'/helpers'
+            directory: config.dir.src+'/helpers'
           }))
         .use(discoverPartials({
-            directory: config.metalsmith.src+'/partials'
+            directory: config.dir.src+'/partials'
           }))
         .use(inPlace())
         .use(layouts({
             engine: 'handlebars',
             default: 'page.html',
-            directory: config.metalsmith.src+'/layouts',
+            directory: config.dir.src+'/layouts',
           }))
         .use(lunr({
             ref: 'path',
@@ -218,11 +131,11 @@ gulp.task('build', ['sass'], function () {
             preprocess: striptags
           }))
         .use(assets({
-            source: config.metalsmith.src+'/assets',
+            source: config.dir.src+'/assets',
             destination: 'assets',
           }))
     )
-    .pipe(gulp.dest(config.metalsmith.dest));
+    .pipe(gulp.dest(config.dir.dest));
 });
 
 function preparePages(entries) {
@@ -238,12 +151,11 @@ function preparePages(entries) {
 }
 
 gulp.task('sass', function() {
-  return gulp.src(config.metalsmith.src+'/process/assets/stylesheets/**/*.scss')
-//  .src(config.metalsmith.src+'process/assets/stylesheets/**/*.scss')
+  return gulp.src(config.dir.src+'/process/assets/stylesheets/**/*.scss')
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
-  .pipe(gulp.dest(config.metalsmith.dest+'/assets/stylesheets/'));
+  .pipe(gulp.dest(config.dir.dest+'/assets/stylesheets/'));
 });
 
 gulp.task('sass:watch', function() {

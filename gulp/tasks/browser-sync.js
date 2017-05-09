@@ -1,6 +1,6 @@
-var gulp = require('gulp');
-var browserSync = require('browser-sync');
-var config = require('../config');
+const gulp = require('gulp'),
+      browserSync = require('browser-sync'),
+      config = require('../../configuration/config');
 
 gulp.task('browser-sync', function() {
   return browserSync(config.browserSync);
