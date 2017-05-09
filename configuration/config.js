@@ -20,6 +20,6 @@ module.exports = {
   },
   publish: {
     ghPagesRepo: 'https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme.git',
-    url: 'https://patmuk.github.io/neo-hpstr-metalsmith-gulp-theme/'
+    url: 'https://patmuk.github.io/neo-hpstr-metalsmith-gulp-theme'
   }
 };

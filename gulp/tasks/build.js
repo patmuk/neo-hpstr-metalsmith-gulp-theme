@@ -5,7 +5,7 @@ const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'product
 //      debug = devBuild ? require('metalsmith-debug') : null;
       config = require('../../configuration/config');
       metadata = require(config.dir.config+'/metadata');
-
+console.log("build: NODE_ENV is "+process.env.NODE_ENV);
 const
 //gulp-metalsmith setup
       gulp = require('gulp'),
@@ -40,19 +40,29 @@ const
 //gulp-plugins
       sass = require('gulp-sass');
 
-
-gulp.task('default', ['watch']);
-
-gulp.task('clean', function () {
-  del(config.dir.dest+'/**');
-});
-
 gulp.task('watch', function () {
   gulp.watch(config.dir.src+'/**', ['metalsmith-json']);
 });
 
 
-gulp.task('build', ['sass'], function () {
+gulp.task('clean', function () {
+  return del(config.dir.dest+'/**');
+});
+
+gulp.task('sass', function(done) {
+  return gulp.src(config.dir.src+'/process/assets/stylesheets/**/*.scss')
+  .pipe(sass({
+    outputStyle: 'expanded',
+  }).on('error', sass.logError))
+  .pipe(gulp.dest(config.dir.dest+'/assets/stylesheets/'));
+  done();
+});
+
+gulp.task('sass:watch', function() {
+  gulp.watch('sass/**/*.scss', ['sass']);
+});
+
+gulp.task('build', gulp.parallel('sass', function () {
   return gulp
   .src([config.dir.src+'/process/**/*', '!'+config.dir.src+'/process/assets/stylesheets/**/*.scss'])
 //    .pipe(debug({title: 'metalsmith:'}))
@@ -136,7 +146,7 @@ gulp.task('build', ['sass'], function () {
           }))
     )
     .pipe(gulp.dest(config.dir.dest));
-});
+}));
 
 function preparePages(entries) {
   return entries.items.reduce(function (acc, item) {
@@ -149,18 +159,6 @@ function preparePages(entries) {
     return acc;
   }, {});
 }
-
-gulp.task('sass', function() {
-  return gulp.src(config.dir.src+'/process/assets/stylesheets/**/*.scss')
-  .pipe(sass({
-    outputStyle: 'expanded',
-  }).on('error', sass.logError))
-  .pipe(gulp.dest(config.dir.dest+'/assets/stylesheets/'));
-});
-
-gulp.task('sass:watch', function() {
-  gulp.watch('sass/**/*.scss', ['sass']);
-});
 
 function relations(options) {
   options = Object.assign({
