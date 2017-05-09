@@ -3,5 +3,5 @@ const gulp = require('gulp'),
       config = require('../../configuration/config');
 
 gulp.task('browser-sync', function() {
-  return browserSync(config.browserSync);
+  browserSync(config.browserSync);
 });
