@@ -1,7 +1,7 @@
 {
-  "name": "neo-hpstr-metalsmith-theme",
+  "name": "neo-hpstr-metalsmith-gulp-theme",
   "version": "1.1.0",
-  "description": "Neo-HPSTR Metalsmith is a responsive and modern blog template based on Neo-HPSTR Jekyll",
+  "description": "Neo-HPSTR Metalsmith is a responsive and modern blog template based on Neo-HPSTR Jekyll, buildable with gulp",
   "main": "index.js",
   "scripts": {
     "prestart": "npm install",
@@ -9,15 +9,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tjpeden/neo-hpstr-metalsmith-theme.git"
+    "url": "git+https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme.git"
   },
-  "author": "TJ Peden <tj@tjcoding.com>",
-  "contributors": ["Dr. Patrick Mukherjee <patrick.mukherjee@gmail.com>"],
+  "author": "Dr. Patrick Mukherjee <patrick.mukherjee@gmail.com>",
+  "contributors": ["TJ Peden <tj@tjcoding.com>"],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tjpeden/neo-hpstr-metalsmith-theme/issues"
+    "url": "https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme/issues"
   },
-  "homepage": "https://github.com/tjpeden/neo-hpstr-metalsmith-theme",
+  "homepage": "http://patrick.mukherjee.de",
   "dependencies": {
     "del": "^2.2.2",
     "gulp": "^3.9.1",

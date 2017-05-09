@@ -2,7 +2,7 @@
 
 [![GitHub Version][3]][4]
 
-Neo-HPSTR Metalsmith is a responsive and modern blog template based on [Neo-HPSTR Jekyll][1]
+Neo-HPSTR Metalsmith is a responsive and modern blog template based on [Neo-HPSTR Jekyll][1], ported to metalsmith by [TJ Peden's template][11]
 
 ![Preview][5]
 
@@ -12,6 +12,7 @@ Neo-HPSTR Metalsmith is a responsive and modern blog template based on [Neo-HPST
 
 - [Installation](#installation)
 - [Features](#features)
+- [gulp-build](#gulp-build)
 - [Configuration](#configuration)
 - [License](#license)
 
@@ -40,7 +41,7 @@ NOTE: If you're going to serve this using GitHub Pages, be sure to enable GitHub
 * [Syntax highlighting](#) to make your code examples look snazzy.
 * Author panel with social links.
 
-## gulp build
+## gulp-build
 `gulp` is the prefered way to build, as it is faster. Tasks are executed in parallel. Most metalsmith plugins are just wrapped gulp plugins.
 
 However, for compatibility reasons `node .` still works as well.
@@ -122,3 +123,4 @@ The theme is available as open source under the terms of the [MIT License][2].
 [8]: http://disqus.com
 [9]: https://developers.facebook.com/docs/opengraph
 [10]: https://dev.twitter.com/docs/cards
+[11]: https://github.com/tjpeden/neo-hpstr-metalsmith-theme
