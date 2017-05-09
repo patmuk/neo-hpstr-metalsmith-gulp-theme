@@ -22,10 +22,10 @@ module.exports = {
       url: '#',
       submenu: [{
         title: 'Install',
-        url: "https://github.com/tjpeden/neo-hpstr-metalsmith-theme#installation",
+        url: "https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme#installation",
       }, {
         title: 'Fork',
-        url: "https://github.com/tjpeden/neo-hpstr-metalsmith-theme",
+        url: "https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme",
       }]
     }, {
       title: 'About',
