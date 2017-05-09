@@ -1,10 +1,12 @@
+const config = require('./config');
+
 
 module.exports = {
   site: {
     // Site Info
     title: "Patrick Mukherjee",
     description: "Dr.-Ing.",
-//    url: process.env.NODE_ENV === 'production' ? "http://peden.software/neo-hpstr-metalsmith-theme" : 'http://localhost:8080',
+    url: process.env.NODE_ENV === 'production' ? "config.publish.url" : 'file:///'+config.dir.dest,
 
     reading_time: true,
     words_per_minute: 200,
