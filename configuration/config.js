@@ -20,6 +20,7 @@ module.exports = {
   },
   publish: {
     ghPagesRepo: 'https://github.com/patmuk/patmuk.github.io.git'
+    branch: 'master',
     url: 'https://patmuk.github.io'
   }
 };
