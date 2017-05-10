@@ -19,7 +19,7 @@ module.exports = {
     files:  [rootdir + '/src/**/*']
   },
   publish: {
-    ghPagesRepo: 'https://github.com/patmuk/patmuk.github.io.git'
+    ghPagesRepo: 'https://github.com/patmuk/patmuk.github.io.git',
     branch: 'master',
     url: 'https://patmuk.github.io'
   }
