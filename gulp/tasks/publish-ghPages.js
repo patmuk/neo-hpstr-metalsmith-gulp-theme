@@ -10,7 +10,8 @@ const gulp = require('gulp'),
 
 gulp.task('publish-gh', gulp.series('set-prod-node-env', 'build', function(done) {
   ghpages.publish(config.dir.dest, {
-    repo: config.publish.ghPagesRepo
+    repo: config.publish.ghPagesRepo,
+    branch: config.publish.branch
   }, function(err) {});
   done();
 }));
