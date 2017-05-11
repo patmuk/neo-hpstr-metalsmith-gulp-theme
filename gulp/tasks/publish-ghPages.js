@@ -1,15 +1,13 @@
-process.env.NODE_ENV = 'production';
-
 const gulp = require('gulp'),
       ghpages = require('gh-pages'),
       path = require('path'),
-      setEnv = require('./setNodeEnv'),
       config = require('../../configuration/config'),
       build = require('./build');
 //publish to github
 
-gulp.task('publish-gh', gulp.series('set-prod-node-env', 'build', function(done) {
-  ghpages.publish(config.dir.dest, {
+gulp.task('publish-gh', gulp.series('build', function(done) {
+    if (process.env.NODE_ENV != 'production') {throw new Error("gulp publish-gh needs to have NODE_ENV = 'production'. It is best to invoke it with 'npm run publish-gh' instead!");}//console.error();}
+    ghpages.publish(config.dir.dest, {
     repo: config.publish.ghPagesRepo,
     branch: config.publish.branch
   }, function(err) {});
