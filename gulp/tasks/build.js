@@ -38,6 +38,8 @@ const
       striptags          = require('striptags'),
       {TfIdf}            = require('natural'),
 //gulp-plugins
+      filter = require('gulp-filter'),
+      replace = require('gulp-replace'),
       sass = require('gulp-sass');
 
 gulp.task('watch', function () {
@@ -50,7 +52,15 @@ gulp.task('clean', function () {
 });
 
 gulp.task('sass', function(done) {
+  console.log("ENV "+process.env.NODE_ENV);
+  console.log("devBuild "+devBuild);
+  //add site.url to font-awsome/_variables.scss
+  const f = filter(['src/process/assets/stylesheets/vendor/font-awesome/_variables.scss'], {restore: true});
   return gulp.src(config.dir.src+'/process/assets/stylesheets/**/*.scss')
+  .pipe(f)
+  .pipe(replace(/(\$fa-font-path:\s*")(.*)"/g, '$1'+metadata.site.url+'$2"'))
+  .pipe(f.restore)
+  //compile sass to css
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
