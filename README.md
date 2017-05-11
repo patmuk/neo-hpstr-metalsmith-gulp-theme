@@ -55,6 +55,16 @@ However, for compatibility reasons `node .` still works as well.
 
 `gulp clean` to clean the build-directory for a fresh rebuild
 
+#### dev and prod mode
+prefix the gulp commando with
+`NODE_ENV='production'` to build code for production.
+All other values (or none) are treated as dev mode.
+
+#### Publish to GitHub Pages
+Use `npm run gulp publish-gh` or `NODE_ENV='production' gulp publish-gh` to upload the build result to GitHub Pages (the goal repository must be set in `/configuration/config.js`).
+
+This is needed to have production mode enabled (which corrects the url for all assets). `gulp publish-gh` will abort with an error message.
+
 ## Configuration
 
 Here are some tips on how to customize your blog theme. If you have questions, just open a new issue. :)
