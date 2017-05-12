@@ -8,8 +8,9 @@ gulp.task('watch:sass', function() {
 });
 
 gulp.task('watch:content', function() {
-  gulp.watch([config.dir.src.content+'/*', config.dir.src.content+'/**/*', config.dir.config+'/*', config.dir.config+'/**/*'], gulp.series('build'))
-  .on('change', browserSync.reload);
+  browserSync.init(config.browserSync);
+  gulp.watch([config.dir.src.content+'/*', config.dir.src.content+'/**/*', config.dir.config+'/*', config.dir.config+'/**/*'], gulp.series('build'));
+//  .on('change', browserSync.reload);
 });
 
 
