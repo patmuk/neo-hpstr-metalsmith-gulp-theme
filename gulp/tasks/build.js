@@ -41,7 +41,8 @@ const
       filter = require('gulp-filter'),
       replace = require('gulp-replace'),
       sass = require('gulp-sass'),
-      watch = require('gulp-watch');
+      watch = require('gulp-watch'),
+      browserSync = require('browser-sync');
 
 gulp.task('clean', function () {
   return del(config.dir.dest+'/**');
@@ -61,7 +62,8 @@ gulp.task('sass', function(done) {
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
-  .pipe(gulp.dest(config.dir.dest+'/assets/stylesheets/'));
+  .pipe(gulp.dest(config.dir.dest+'/assets/stylesheets/'))
+  .pipe(browserSync.stream());
   done();
 });
 
@@ -149,7 +151,8 @@ gulp.task('build', gulp.parallel('sass', function () {
             destination: 'assets',
           }))
     )
-    .pipe(gulp.dest(config.dir.dest));
+    .pipe(gulp.dest(config.dir.dest))
+    .pipe(browserSync.stream());
 }));
 
 function preparePages(entries) {
