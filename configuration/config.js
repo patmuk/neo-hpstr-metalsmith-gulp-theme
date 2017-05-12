@@ -6,7 +6,11 @@ console.log(__dirname);
 module.exports = {
   dir: {
     base: rootdir,
-    src: rootdir+'/src',
+    src: {
+      root: rootdir+'/src',
+      content: rootdir+'/src/process',
+      stylesheets: rootdir+'/src/process/assets/stylesheets',
+    },
     dest: rootdir+'/build',
     config: rootdir+'/configuration'
   },
