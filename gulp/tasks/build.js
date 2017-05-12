@@ -40,12 +40,8 @@ const
 //gulp-plugins
       filter = require('gulp-filter'),
       replace = require('gulp-replace'),
-      sass = require('gulp-sass');
-
-gulp.task('watch', function () {
-  gulp.watch(config.dir.src+'/**', ['metalsmith-json']);
-});
-
+      sass = require('gulp-sass'),
+      watch = require('gulp-watch');
 
 gulp.task('clean', function () {
   return del(config.dir.dest+'/**');
@@ -55,12 +51,13 @@ gulp.task('sass', function(done) {
   console.log("ENV "+process.env.NODE_ENV);
   console.log("devBuild "+devBuild);
   //add site.url to font-awsome/_variables.scss
-  const f = filter(['src/process/assets/stylesheets/vendor/font-awesome/_variables.scss'], {restore: true});
-  return gulp.src(config.dir.src+'/process/assets/stylesheets/**/*.scss')
+  const f = filter([config.dir.src.stylesheets+'/vendor/font-awesome/_variables.scss'], {restore: true});
+  return gulp.src(config.dir.src.stylesheets+'/**/*.scss')
   .pipe(f)
   .pipe(replace(/(\$fa-font-path:\s*")(.*)"/g, '$1'+metadata.site.url+'$2"'))
   .pipe(f.restore)
   //compile sass to css
+//  .pipe(watch(config.dir.src.stylesheets+'/**/*.scss'))//incremental
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
@@ -68,14 +65,11 @@ gulp.task('sass', function(done) {
   done();
 });
 
-gulp.task('sass:watch', function() {
-  gulp.watch('sass/**/*.scss', ['sass']);
-});
-
 gulp.task('build', gulp.parallel('sass', function () {
   return gulp
-  .src([config.dir.src+'/process/**/*', '!'+config.dir.src+'/process/assets/stylesheets/**/*.scss'])
-//    .pipe(debug({title: 'metalsmith:'}))
+  .src([config.dir.src.content+'/**/*', '!'+config.dir.src.stylesheets+'/**/*.scss'])
+// never finishes
+//  .pipe(watch([config.dir.src.content+'/**/*', '!'+config.dir.src.stylesheets+'/**/*.scss']))//incremental
     .pipe(gulp_front_matter()).on("data", function(file) {
         assign(file, file.frontMatter);
         delete file.frontMatter;
@@ -129,16 +123,16 @@ gulp.task('build', gulp.parallel('sass', function () {
             path: 'page',
           }))
         .use(discoverHelpers({
-            directory: config.dir.src+'/helpers'
+            directory: config.dir.src.root+'/helpers'
           }))
         .use(discoverPartials({
-            directory: config.dir.src+'/partials'
+            directory: config.dir.src.root+'/partials'
           }))
         .use(inPlace())
         .use(layouts({
             engine: 'handlebars',
             default: 'page.html',
-            directory: config.dir.src+'/layouts',
+            directory: config.dir.src.root+'/layouts',
           }))
         .use(lunr({
             ref: 'path',
@@ -151,7 +145,7 @@ gulp.task('build', gulp.parallel('sass', function () {
             preprocess: striptags
           }))
         .use(assets({
-            source: config.dir.src+'/assets',
+            source: config.dir.src.root+'/assets',
             destination: 'assets',
           }))
     )
