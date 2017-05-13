@@ -3,4 +3,4 @@ const gulp = require('gulp'),
 
 requireDir('./gulp/tasks/');
 
-gulp.task('default', gulp.series('build', 'browser-sync','watch'));
+gulp.task('default', gulp.series('build', gulp.parallel('watch')));
