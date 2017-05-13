@@ -14,7 +14,8 @@ const
       gulpsmith = require('gulpsmith'),
       gulp_front_matter = require('gulp-front-matter'),
       assign = require('lodash.assign');
-
+//other gulp tasks
+const sass = require('./sass');
 
 const
 //metalsmith-plugins
@@ -38,33 +39,10 @@ const
       striptags          = require('striptags'),
       {TfIdf}            = require('natural'),
 //gulp-plugins
-      filter = require('gulp-filter'),
-      replace = require('gulp-replace'),
-      sass = require('gulp-sass'),
-      watch = require('gulp-watch'),
       browserSync = require('browser-sync');
 
 gulp.task('clean', function () {
   return del(config.dir.dest+'/**');
-});
-
-gulp.task('sass', function(done) {
-  console.log("ENV "+process.env.NODE_ENV);
-  console.log("devBuild "+devBuild);
-  //add site.url to font-awsome/_variables.scss
-  const f = filter([config.dir.src.stylesheets+'/vendor/font-awesome/_variables.scss'], {restore: true});
-  return gulp.src(config.dir.src.stylesheets+'/**/*.scss')
-  .pipe(f)
-  .pipe(replace(/(\$fa-font-path:\s*")(.*)"/g, '$1'+metadata.site.url+'$2"'))
-  .pipe(f.restore)
-  //compile sass to css
-//  .pipe(watch(config.dir.src.stylesheets+'/**/*.scss'))//incremental
-  .pipe(sass({
-    outputStyle: 'expanded',
-  }).on('error', sass.logError))
-  .pipe(gulp.dest(config.dir.dest+'/assets/stylesheets/'))
-  .pipe(browserSync.stream());
-  done();
 });
 
 gulp.task('build', gulp.parallel('sass', function () {
@@ -154,18 +132,6 @@ gulp.task('build', gulp.parallel('sass', function () {
     .pipe(gulp.dest(config.dir.dest))
     .pipe(browserSync.stream());
 }));
-
-function preparePages(entries) {
-  return entries.items.reduce(function (acc, item) {
-    acc[item.fields.slug.replace(/\.html$/, '.md')] = {
-      title: item.fields.title,
-      order: item.fields.order,
-      layout: 'basic.swig',
-      contents: item.fields.content
-    };
-    return acc;
-  }, {});
-}
 
 function relations(options) {
   options = Object.assign({
