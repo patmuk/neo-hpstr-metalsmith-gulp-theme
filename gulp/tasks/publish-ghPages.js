@@ -2,7 +2,7 @@ const gulp = require('gulp'),
       ghpages = require('gh-pages'),
       path = require('path'),
       config = require('../../configuration/config'),
-      build = require('./build');
+      build = require('../../gulpfile.js');
 //publish to github
 
 gulp.task('publish-gh', gulp.series('build', function(done) {

@@ -1,6 +1,4 @@
 const gulp = require('gulp'),
-      requireDir = require('require-dir');
+      requireDir = require('require-dir')('./gulp/tasks/');
 
-requireDir('./gulp/tasks/');
-
-gulp.task('default', gulp.series('build', gulp.parallel('watch')));
+  gulp.task('default', gulp.series('build', gulp.parallel('watch')));

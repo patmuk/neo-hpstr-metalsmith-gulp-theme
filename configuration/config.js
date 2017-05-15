@@ -9,7 +9,7 @@ module.exports = {
     src: {
       root: rootdir+'/src',
       content: rootdir+'/src/process',
-      stylesheets: rootdir+'/src/process/assets/stylesheets',
+      stylesheets: rootdir+'/src/process/assets/stylesheets'
     },
     dest: rootdir+'/build',
     config: rootdir+'/configuration'
