@@ -14,6 +14,7 @@ Neo-HPSTR Metalsmith is a responsive and modern blog template based on [Neo-HPST
 - [Features](#features)
 - [gulp-build](#gulp-build)
 - [Configuration](#configuration)
+- [Testing](#Testing)
 - [License](#license)
 
 ## Installation
@@ -117,7 +118,16 @@ Configure the bolg's metadata in ./configuration/metadata.js file.
         ├── index.html.hbs          # home page
         ├── posts/index.html.hbs    # archives page
         └── search/index.html.hbs   # search page
+└── tests                           # mocha tests
 
+## Testing
+Run the tests with
+(fastes)
+'./node_modules/.bin/mocha --reporter spec'
+(slower)
+`npm test`
+(slowest)
+`gulp test`
 
 ## License
 
