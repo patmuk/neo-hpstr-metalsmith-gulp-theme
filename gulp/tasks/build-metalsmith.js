@@ -1,7 +1,7 @@
 //config
 process.env.DEBUG = 'metalsmith:destination metalsmith';
 const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
-      debug = devBuild ? require('gulp-debug') : null,
+//      debug = devBuild ? require('gulp-debug') : null,
 //      debug = devBuild ? require('metalsmith-debug') : null;
       config = require('../../configuration/config');
       metadata = require(config.dir.config+'/metadata');

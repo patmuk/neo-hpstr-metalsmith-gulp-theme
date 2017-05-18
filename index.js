@@ -2,7 +2,6 @@
 //config
 process.env.DEBUG = 'metalsmith:destination metalsmith';
 const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
-      debug = devBuild ? require('metalsmith-debug') : null,
       config = require('./configuration/config'),
       metadata = require(config.dir.config+'/metadata');
 
@@ -39,78 +38,21 @@ const dir = {
   dest:   './build'
 }
 
-function relations(options) {
-  options = Object.assign({
-    terms: 5,
-    max: 5,
-    threshold: 0,
-    text: document => String(document.contents)
-  }, options);
-
-  if(options.match == null) {
-    throw new Error("Expected match criteria on which to filter.");
-  }
-
-  function matchDocument(file) {
-    const {match} = options;
-
-    return Object.keys(match).every(key => {
-      if(file[key] === match[key]) { return true }
-      if(file[key] && file[key].indexOf) {
-        return file[key].indexOf(match[key]) > -1;
-      }
-
-      return false;
-    });
-  }
-
-  return (files, metalsmith, done) => {
-    const tfidf = new TfIdf();
-    const keys = Object.keys(files).filter(key => matchDocument(files[key]));
-
-    keys.forEach(key => tfidf.addDocument(options.text(files[key]), key));
-
-    keys.forEach((key, index) => {
-      const document = files[key];
-      const keyTerms = tfidf.listTerms(index)
-      .slice(0, options.terms)
-      .map(({term}) => term);
-
-      document.relations = keys.reduce((relations, key, d) => {
-        if(d !== index) {
-          const frequency = tfidf.tfidf(keyTerms, d);
-
-          if(frequency > options.threshold) {
-            relations.push({key, frequency});
-          }
-        }
-
-        return relations;
-      }, [])
-      .sort((a, b) => a.frequency - b.frequency)
-      .slice(0, options.max)
-      .map(({key}) => files[key]);
-    });
-
-    done();
-  };
-}
-
 console.log('ENV:', process.env.NODE_ENV || 'development');
 
 var ms = metalsmith(__dirname)
 .metadata(metadata);
 
-if (devBuild) ms.use(debug());
+if (devBuild) ms.use(inspect({
+  disable: false,
+  includeMetalsmith: true,
+  exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
+}));
+
 ms
 .source(dir.source+'/process')
 .destination(config.dir.dest)
 .use(sass())
-.use(inspect({
-  disable: true,
-  includeMetalsmith: true,
-  exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
-}))
 .clean(!devBuild)
 .use(drafts())
 .use(collections({
@@ -191,3 +133,60 @@ ms.build((error, files) => {
     throw error;
   }
 });
+
+function relations(options) {
+  options = Object.assign({
+    terms: 5,
+    max: 5,
+    threshold: 0,
+    text: document => String(document.contents)
+  }, options);
+
+  if(options.match == null) {
+    throw new Error("Expected match criteria on which to filter.");
+  }
+
+  function matchDocument(file) {
+    const {match} = options;
+
+    return Object.keys(match).every(key => {
+      if(file[key] === match[key]) { return true }
+      if(file[key] && file[key].indexOf) {
+        return file[key].indexOf(match[key]) > -1;
+      }
+
+      return false;
+    });
+  }
+
+  return (files, metalsmith, done) => {
+    const tfidf = new TfIdf();
+    const keys = Object.keys(files).filter(key => matchDocument(files[key]));
+
+    keys.forEach(key => tfidf.addDocument(options.text(files[key]), key));
+
+    keys.forEach((key, index) => {
+      const document = files[key];
+      const keyTerms = tfidf.listTerms(index)
+      .slice(0, options.terms)
+      .map(({term}) => term);
+
+      document.relations = keys.reduce((relations, key, d) => {
+        if(d !== index) {
+          const frequency = tfidf.tfidf(keyTerms, d);
+
+          if(frequency > options.threshold) {
+            relations.push({key, frequency});
+          }
+        }
+
+        return relations;
+      }, [])
+      .sort((a, b) => a.frequency - b.frequency)
+      .slice(0, options.max)
+      .map(({key}) => files[key]);
+    });
+
+    done();
+  };
+}

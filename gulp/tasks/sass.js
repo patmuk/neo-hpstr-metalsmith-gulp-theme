@@ -1,14 +1,10 @@
 //config
-const config = require('../../configuration/config'),
-      metadata = require(config.dir.config+'/metadata');
+const config = require('../../configuration/config');
 const
 //gulp-metalsmith setup
       gulp = require('gulp'),
 //gulp-plugins
-      filter = require('gulp-filter'),
-      replace = require('gulp-replace'),
       sass = require('gulp-sass'),
-      debug = require('gulp-debug'),
       browserSync = require('browser-sync');
 
 gulp.task('sass', function(done) {

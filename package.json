@@ -3,13 +3,41 @@
   "version": "1.1.0",
   "description": "Neo-HPSTR Metalsmith is a responsive and modern blog template based on Neo-HPSTR Jekyll, buildable with gulp",
   "main": "index.js",
+  "config": {
+    "dir": {
+      "buildScripts": "./npm_build_scripts",
+      "src": {
+        "rootdir": "./src",
+        "assets": "./src/assets",
+        "contents": "./src/process/contents",
+        "sass": "./src/process/assets/stylesheets"
+      },
+      "dest": "./out"
+    },
+    "publish": {
+      "ghPagesRepo": "https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme.git",
+      "branch": "gh-pages",
+      "url": "https://patmuk.github.io/neo-hpstr-metalsmith-gulp-theme"
+    }
+  },
   "scripts": {
-    "prestart": "npm install",
-    "start": "node .",
-    "devBuild": "NODE_ENV='development' gulp",
-    "prodBuild": "NODE_ENV='production' gulp",
+    "test": "./node_modules/.bin/mocha --reporter spec",
+    "orgPrestart": "npm install",
+    "orgStart": "node .",
+    "devBuildGulp": "NODE_ENV='development' gulp",
+    "prodBuildGulp": "NODE_ENV='production' gulp",
+    "devBuild": "NODE_ENV='development' npm run build",
+    "prodBuild": "NODE_ENV='production' npm run build",
     "publish-gh": "NODE_ENV='production' gulp publish-gh",
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "start": "npm run build-ms $ npm run copyAssets",
+    "build": "mkdir -p $npm_package_config_dir_dest ; run-p build:*",
+    "build:ms": "node $npm_package_config_dir_buildScripts/build-metalsmith",
+    "build:cpAssets": "cp -r $npm_package_config_dir_src_assets $npm_package_config_dir_dest/.",
+    "obuild:sass": "gulp sass",
+    "build:sass": "run-p build:sass:*",
+    "build:sass:main": "node-sass $npm_package_config_dir_src_sass/main.scss -o $npm_package_config_dir_dest/assets/stylesheets",
+    "build:sass:fa": "node-sass $npm_package_config_dir_src_sass/vendor/font-awesome/font-awesome.scss -o $npm_package_config_dir_dest/assets/stylesheets/vendor/font-awesome",
+    "clean": "rm -rf $npm_package_config_dir_dest"
   },
   "repository": {
     "type": "git",
@@ -26,22 +54,24 @@
   "homepage": "http://patrick.mukherjee.de",
   "dependencies": {
     "chai": "^3.5.0",
+    "chai-fs": "^1.0.0",
     "chai-things": "^0.2.0",
-    "del": "^2.2.2",
     "fs-readdir-recursive": "^1.0.0",
-    "gh-pages": "^1.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
-    "gulp-filter": "^5.0.0",
-    "gulp-front-matter": "^1.3.0",
-    "gulp-match": "^1.0.3",
     "gulp-mocha": "^4.3.1",
-    "gulp-replace": "^0.5.4",
+    "mocha": "^3.4.1",
+    "npm-run-all": "^4.0.2",
+    "require-dir": "^0.3.1"
+  },
+  "devDependencies": {
+    "del": "^2.2.2",
+    "gh-pages": "^1.0.0",
+    "gulp-front-matter": "^1.3.0",
     "gulp-sass": "^3.1.0",
     "gulp-watch": "^4.3.11",
     "gulpsmith": "^0.5.5",
     "handlebars": "^4.0.5",
     "jstransformer-handlebars": "^1.0.0",
-    "map-stream": "0.0.7",
     "metalsmith": "^2.3.0",
     "metalsmith-assets": "^0.1.0",
     "metalsmith-browser-sync": "^1.1.1",
@@ -60,16 +90,10 @@
     "metalsmith-permalinks": "^0.5.0",
     "metalsmith-prism": "^3.0.2",
     "metalsmith-sass": "^1.4.0",
-    "mocha": "^3.4.1",
     "natural": "^0.5.0",
     "remarkable-emoji": "^0.1.3",
     "remarkable-mentions": "^0.1.0",
-    "require-dir": "^0.3.1",
     "run-sequence": "^1.2.2",
     "striptags": "^3.0.1"
-  },
-  "devDependencies": {
-    "gulp-debug": "^3.1.0",
-    "metalsmith-debug": "^1.1.0"
   }
 }
