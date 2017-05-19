@@ -93,57 +93,57 @@ Configure the bolg's metadata in ./configuration/metadata.js file.
 
 ### Project tree
 
-├── LICENSE
-├── README.md
-├── gulpfile.js                     # main build file, using `gulp`
-├── index.js                        # main build file, using `node .`
-├── package.json                    # main build file, using `npm run build`
-|                                   # package dependencies for all builds, install with `npm install`
-|                                   # directory settings
-├──configuration/                   # configuration for the blog
-|   ├── settings.js                 # build settings for the plugins
-|   └── metadata.js                 # blog metadata
-├── build-scripts                   # scripts used in a build
-│   └── gulp-tasks                  # individual gulp build tasks (instead of a single gulpfile.js)
-│       ├── browser-sync.js         # view locally built blog in browser
-│       ├── build-metalsmith.js     # task to build the html files (inluding posts) only
-│       ├── build.js                # main task to build the blog, calls the other build-tasks in parallel
-│       ├── cp-assets.js            # task to copy the static assets
-│       ├── publish-ghPages.js      # task to publish the result to gitHub Pages. Configure it in package.json.
-│       ├── sass.js                 # task to build css from scss sources
-│       └── watch.js                # rebuild on file changes (not tested)
-├── src                             # all sources needed for the build process
-|   ├── assets                      # assets to be copied unprocessed to `/build`
-|   │   ├── fonts/                  # fonts (i.e. FontAwesome)
-|   │   ├── images/                 # images (i.e. logo, favicon, etc)
-|   │   ├── javascripts/            # third-party and page specific js
-|   │   ├── stylesheets/            # css (not compiled)
-|   ├── helpers/                    # handlebars helpers
-|   ├── layouts/                    # blog layouts
-|   │   ├── home.html
-|   │   ├── page.html
-|   │   └── post.html
-|   ├── partials/
-|   │   ├── author.hbs              # author banner (at the end of post)
-|   │   ├── disqus-comments.hbs     # comments
-|   │   ├── footer.hbs              # page footer
-|   │   ├── head.hbs                # site head, with css includes and metadata
-|   │   ├── header.hbs              # header menu
-|   │   ├── icons.hbs               # site icons
-|   │   ├── pagination.hbs          # pagination
-|   │   ├── read-more.hbs           # read-more banner, to recommend posts
-|   │   ├── scripts.hbs             # js scripts
-|   │   └── social-share.hbs        # floating social share integration
-|   └── process                     # files to process
-|       ├── 404.html.hbs            # 404 page
-|       ├── _posts                  # blog posts
-|       ├── about/index.md          # about page
-|       ├── assets/stylesheets      # blog style; scss to be compiled to /build/assets/stylesheets
-|       ├── index.html.hbs          # home page
-|       ├── posts/index.html.hbs    # archives page
-|       └── search/index.html.hbs   # search page
-└── test                            # mocha tests
-    └── checkOutput.js              # test to check the resulting directory structure
+├── LICENSE  
+├── README.md  
+├── gulpfile.js                     # main build file, using `gulp`  
+├── index.js                        # main build file, using `node .`  
+├── package.json                    # main build file, using `npm run build`  
+|                                   # package dependencies for all builds, install with `npm install`  
+|                                   # directory settings  
+├──configuration/                   # configuration for the blog  
+|   ├── settings.js                 # build settings for the plugins  
+|   └── metadata.js                 # blog metadata  
+├── build-scripts                   # scripts used in a build  
+│   └── gulp-tasks                  # individual gulp build tasks (instead of a single gulpfile.js)  
+│       ├── browser-sync.js         # view locally built blog in browser  
+│       ├── build-metalsmith.js     # task to build the html files (inluding posts) only  
+│       ├── build.js                # main task to build the blog, calls the other build-tasks in parallel  
+│       ├── cp-assets.js            # task to copy the static assets  
+│       ├── publish-ghPages.js      # task to publish the result to gitHub Pages. Configure it in package.json  
+│       ├── sass.js                 # task to build css from scss sources  
+│       └── watch.js                # rebuild on file changes (not tested)  
+├── src                             # all sources needed for the build process  
+|   ├── assets                      # assets to be copied unprocessed to `/build`  
+|   │   ├── fonts/                  # fonts (i.e. FontAwesome)  
+|   │   ├── images/                 # images (i.e. logo, favicon, etc)  
+|   │   ├── javascripts/            # third-party and page specific js  
+|   │   ├── stylesheets/            # css (not compiled)  
+|   ├── helpers/                    # handlebars helpers  
+|   ├── layouts/                    # blog layouts  
+|   │   ├── home.html  
+|   │   ├── page.html  
+|   │   └── post.html  
+|   ├── partials/  
+|   │   ├── author.hbs              # author banner (at the end of post)  
+|   │   ├── disqus-comments.hbs     # comments  
+|   │   ├── footer.hbs              # page footer  
+|   │   ├── head.hbs                # site head, with css includes and metadata  
+|   │   ├── header.hbs              # header menu  
+|   │   ├── icons.hbs               # site icons  
+|   │   ├── pagination.hbs          # pagination  
+|   │   ├── read-more.hbs           # read-more banner, to recommend posts  
+|   │   ├── scripts.hbs             # js scripts  
+|   │   └── social-share.hbs        # floating social share integration  
+|   └── process                     # files to process  
+|       ├── 404.html.hbs            # 404 page  
+|       ├── _posts                  # blog posts  
+|       ├── about/index.md          # about page  
+|       ├── assets/stylesheets      # blog style; scss to be compiled to /build/assets/stylesheets  
+|       ├── index.html.hbs          # home page  
+|       ├── posts/index.html.hbs    # archives page  
+|       └── search/index.html.hbs   # search page  
+└── test                            # mocha tests  
+    └── checkOutput.js              # test to check the resulting directory structure  
 
 
 ## Testing
