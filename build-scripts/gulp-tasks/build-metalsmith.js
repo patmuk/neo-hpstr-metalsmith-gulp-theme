@@ -1,12 +1,14 @@
 //config
-process.env.DEBUG = 'metalsmith:destination metalsmith';
-const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
-      debugBuild = ((process.env.NODE_ENV).trim().toLowerCase() == 'debug'),
-//      debug = devBuild ? require('gulp-debug') : null,
-//      debug = devBuild ? require('metalsmith-debug') : null;
+
+const prodBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
+      debugBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'debug'),
+//      debug = debugBuild ? require('gulp-debug') : null,
+//      debug = debugBuild ? require('metalsmith-debug') : null;
       package = require('../../package'),
       metadata = require('../../'+package.config.metadata);
 console.log("build: NODE_ENV is "+process.env.NODE_ENV);
+if(debugBuild) {process.env.DEBUG = 'metalsmith:destination metalsmith';}
+
 const
 //gulp-metalsmith setup
       gulp = require('gulp'),
@@ -45,7 +47,6 @@ const
 gulp.task('clean', function () {
   return del(package.config.dir.dest+'/**');
 });
-console.log('HELPERS :'+package.config.dir.src.rootdir+'/helpers');
 
 gulp.task('build-ms', gulp.parallel('sass', function () {
   return gulp
