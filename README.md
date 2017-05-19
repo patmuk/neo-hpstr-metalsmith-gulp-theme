@@ -51,16 +51,17 @@ A hyped option is to build using npm only (`npm run build`), which uses cli comm
 However, it is 2-3x slower than the other options! I assume that node is started for every command in the chain individually.
 
 build times:
-    command          | build time
----------------------|-----------
+
+command              | build time
+-------------------- | -----------
 `node .`             | real	0m2.979s, user	0m2.341s, sys	0m0.295s
 `npm run msBuild`    |  real	0m4.007s, user	0m3.029s, sys	0m0.372s
 `gulp build`         |  real	0m4.016s, user	0m2.915s, sys	0m0.388s
 `npm run gulpBuild`  |  real	0m5.066s, user	0m3.595s, sys	0m0.464s
 `npm run build`      |  real	0m6.909s, user	0m6.630s, sys	0m0.975s
 
-`npm run gulpBuild` is a calling `gulp`
-`npm run msBuild` is a calling `node .`
+npm run `gulpBuild` is a calling `gulp`
+npm run `msBuild` is a calling `node .`
 
 However, to be comparable the 'browser-sync' task has been commented.
 
