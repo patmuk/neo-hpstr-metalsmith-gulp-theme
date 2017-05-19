@@ -12,9 +12,9 @@
         "rootdir": "./src",
         "assets": "./src/assets",
         "contents": "./src/process/contents",
-        "sass": "./src/process/assets/stylesheets"
+        "sass": "./src/process/contents/assets/stylesheets"
       },
-      "dest": "./out"
+      "dest": "./build"
     },
     "publish": {
       "ghPagesRepo": "https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme.git",
@@ -24,8 +24,8 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha --reporter spec",
-    "orgPrestart": "npm install",
-    "orgStart": "node .",
+    "preStart": "npm install",
+    "Start": "node .",
     "devBuildGulp": "NODE_ENV='development' gulp",
     "prodBuildGulp": "NODE_ENV='production' gulp",
     "devBuild": "NODE_ENV='development' npm run build",

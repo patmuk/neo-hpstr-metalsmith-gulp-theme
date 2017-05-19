@@ -1,6 +1,6 @@
 //config
 
-const prodBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
+const prodBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'production'),
       debugBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'debug'),
 //      debug = debugBuild ? require('gulp-debug') : null,
 //      debug = debugBuild ? require('metalsmith-debug') : null;
@@ -50,7 +50,7 @@ gulp.task('clean', function () {
 
 gulp.task('build-ms', gulp.parallel('sass', function () {
   return gulp
-  .src([package_json.config.dir.src.contents+'/**/*'])
+  .src([package_json.config.dir.src.contents+'/**/*', '!'+package_json.config.dir.src.sass+'/**/*'])
 // never finishes
 //  .pipe(watch([config.dir.src.content+'/**/*', '!'+config.dir.src.stylesheets+'/**/*.scss']))//incremental
     .pipe(gulp_front_matter()).on("data", function(file) {

@@ -1,9 +1,11 @@
 'use strict';
 //config
 process.env.DEBUG = 'metalsmith:destination metalsmith';
-const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
-      config = require('./configuration/config'),
-      metadata = require(config.dir.config+'/metadata');
+const prodBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'production'),
+      debugBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'debug'),
+      package_json = require('./package'),
+      settings = require(package_json.config.settings),
+      metadata = require(package_json.config.metadata);
 
 const metalsmith         = require('metalsmith');
 const
@@ -28,32 +30,25 @@ const
       striptags          = require('striptags'),
       {TfIdf}            = require('natural'),
 
-      browsersync = devBuild ? require('metalsmith-browser-sync') : null,
+      browsersync = !prodBuild ? require('metalsmith-browser-sync') : null,
       sass = require('metalsmith-sass');
-
-const dir = {
-  base:   __dirname + '/',
-  lib:    __dirname + '/lib/',
-  source: './src',
-  dest:   './build'
-}
 
 console.log('ENV:', process.env.NODE_ENV || 'development');
 
 var ms = metalsmith(__dirname)
 .metadata(metadata);
 
-if (devBuild) ms.use(inspect({
+if (debugBuild) ms.use(inspect({
   disable: false,
   includeMetalsmith: true,
   exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
 }));
 
 ms
-.source(dir.source+'/process')
-.destination(config.dir.dest)
+.source(package_json.config.dir.src.rootdir+'/process/contents')
+.destination(package_json.config.dir.dest)
+.clean(prodBuild)
 .use(sass())
-.clean(!devBuild)
 .use(drafts())
 .use(collections({
   posts: {
@@ -96,16 +91,16 @@ ms
   path: 'page',
 }))
 .use(discoverHelpers({
-    directory: dir.source+'/helpers'
+    directory: package_json.config.dir.src.rootdir+'/helpers'
   }))
 .use(discoverPartials({
-    directory: dir.source+'/partials'
+    directory: package_json.config.dir.src.rootdir+'/partials'
   }))
 .use(inPlace())
 .use(layouts({
   engine: 'handlebars',
   default: 'page.html',
-  directory: dir.source+'/layouts',
+  directory: package_json.config.dir.src.rootdir+'/layouts',
   pattern: '**/*.html'
 }))
 .use(lunr({
@@ -120,13 +115,13 @@ ms
 }))
 //if processed files (like sass) are mixed with static files (like css) use .ignore('**/*.scss')
 .use(assets({
-  source: dir.source+'/assets',
+  source: package_json.config.dir.src.rootdir+'/assets',
   destination: 'assets',
 }));
 
 if (browsersync) ms.use(browsersync({     // start test server
-  server: config.dir.dest,
-  files:  [dir.source + '/**/*']
+  server: package_json.config.dir.dest,
+  files:  [package_json.config.dir.src.rootdir + '/**/*']
 }));
 
 ms.build((error, files) => {
