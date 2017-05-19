@@ -48,7 +48,7 @@ gulp.task('clean', function () {
   return del(package_json.config.dir.dest+'/**');
 });
 
-gulp.task('build-ms', gulp.parallel('sass', function () {
+gulp.task('build-ms', function () {
   return gulp
   .src([package_json.config.dir.src.contents+'/**/*', '!'+package_json.config.dir.src.sass+'/**/*'])
 // never finishes
@@ -130,7 +130,7 @@ gulp.task('build-ms', gulp.parallel('sass', function () {
     )
     .pipe(gulp.dest(package_json.config.dir.dest))
     .pipe(browserSync.stream());
-}));
+});
 
 function relations(options) {
   options = Object.assign({
