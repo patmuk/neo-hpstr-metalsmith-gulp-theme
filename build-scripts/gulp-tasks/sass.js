@@ -1,5 +1,5 @@
 //config
-const config = require('../../configuration/config');
+const package = require('../../package');
 const
 //gulp-metalsmith setup
       gulp = require('gulp'),
@@ -8,13 +8,13 @@ const
       browserSync = require('browser-sync');
 
 gulp.task('sass', function(done) {
-  return gulp.src(config.dir.src.stylesheets+'/**/*.scss')
+  return gulp.src(package.config.dir.src.sass+'/**/*.scss')
   //compile sass to css
-//  .pipe(watch(config.dir.src.stylesheets+'/**/*.scss'))//incremental
+//  .pipe(watch(package.config.dir.src.sass+'/**/*.scss'))//incremental
   .pipe(sass({
     outputStyle: 'expanded',
   }).on('error', sass.logError))
-  .pipe(gulp.dest(config.dir.dest+'/assets/stylesheets/'))
+  .pipe(gulp.dest(package.config.dir.dest+'/assets/stylesheets/'))
   .pipe(browserSync.stream());
   done();
 });

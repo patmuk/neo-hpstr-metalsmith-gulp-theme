@@ -1,10 +1,11 @@
 //config
 process.env.DEBUG = 'metalsmith:destination metalsmith';
 const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
+      debugBuild = ((process.env.NODE_ENV).trim().toLowerCase() == 'debug'),
 //      debug = devBuild ? require('gulp-debug') : null,
 //      debug = devBuild ? require('metalsmith-debug') : null;
-      config = require('../../configuration/config');
-      metadata = require(config.dir.config+'/metadata');
+      package = require('../../package'),
+      metadata = require('../../'+package.config.metadata);
 console.log("build: NODE_ENV is "+process.env.NODE_ENV);
 const
 //gulp-metalsmith setup
@@ -42,12 +43,13 @@ const
       browserSync = require('browser-sync');
 
 gulp.task('clean', function () {
-  return del(config.dir.dest+'/**');
+  return del(package.config.dir.dest+'/**');
 });
+console.log('HELPERS :'+package.config.dir.src.rootdir+'/helpers');
 
 gulp.task('build-ms', gulp.parallel('sass', function () {
   return gulp
-  .src([config.dir.src.content+'/**/*', '!'+config.dir.src.stylesheets+'/**/*.scss'])
+  .src([package.config.dir.src.contents+'/**/*'])
 // never finishes
 //  .pipe(watch([config.dir.src.content+'/**/*', '!'+config.dir.src.stylesheets+'/**/*.scss']))//incremental
     .pipe(gulp_front_matter()).on("data", function(file) {
@@ -55,10 +57,10 @@ gulp.task('build-ms', gulp.parallel('sass', function () {
         delete file.frontMatter;
     })
     .pipe(
-        gulpsmith(config.dir.base)
+        gulpsmith(package.config.dir.src.rootdir)//all pathes for the plugins are relative to this dir (./src)
         .metadata(metadata)
         .use(inspect({
-              disable: true,
+              disable: !debugBuild,
               includeMetalsmith: true,
               exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
             }))
@@ -103,17 +105,17 @@ gulp.task('build-ms', gulp.parallel('sass', function () {
             path: 'page',
           }))
         .use(discoverHelpers({
-            directory: config.dir.src.root+'/helpers'
-          }))
+          directory: 'helpers'
+        }))
         .use(discoverPartials({
-            directory: config.dir.src.root+'/partials'
-          }))
+          directory: 'partials'
+        }))
         .use(inPlace())
         .use(layouts({
-            engine: 'handlebars',
-            default: 'page.html',
-            directory: config.dir.src.root+'/layouts',
-          }))
+          engine: 'handlebars',
+          default: 'page.html',
+          directory: 'layouts',
+        }))
         .use(lunr({
             ref: 'path',
             indexPath: 'search/index.json',
@@ -124,12 +126,8 @@ gulp.task('build-ms', gulp.parallel('sass', function () {
             },
             preprocess: striptags
           }))
-//        .use(assets({
-//            source: config.dir.src.root+'/assets',
-//            destination: 'assets',
-//          }))
     )
-    .pipe(gulp.dest(config.dir.dest))
+    .pipe(gulp.dest(package.config.dir.dest))
     .pipe(browserSync.stream());
 }));
 

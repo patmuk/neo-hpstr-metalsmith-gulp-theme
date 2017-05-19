@@ -1,12 +1,11 @@
-const config = require('./config');
-
+const package = require('../package');
 
 module.exports = {
   site: {
     // Site Info
     title: "Blog Title",
     description: "Describe your website here.",
-    url: process.env.NODE_ENV === 'production' ? config.publish.url : '',//'file:///'+config.dir.dest,
+    url: process.env.NODE_ENV === 'production' ? package.config.publish.url : '',//'file:///'+config.dir.dest,
 
     reading_time: true,
     words_per_minute: 200,

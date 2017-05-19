@@ -4,8 +4,10 @@
   "description": "Neo-HPSTR Metalsmith is a responsive and modern blog template based on Neo-HPSTR Jekyll, buildable with gulp",
   "main": "index.js",
   "config": {
+    "settings": "./configuration/settings",
+    "metadata": "./configuration/metadata",
     "dir": {
-      "buildScripts": "./npm_build_scripts",
+      "buildScripts": "./build-scripts",
       "src": {
         "rootdir": "./src",
         "assets": "./src/assets",
@@ -31,7 +33,7 @@
     "publish-gh": "NODE_ENV='production' gulp publish-gh",
     "start": "npm run build-ms $ npm run copyAssets",
     "build": "mkdir -p $npm_package_config_dir_dest ; run-p build:*",
-    "build:ms": "node $npm_package_config_dir_buildScripts/build-metalsmith",
+    "build:ms": "node $npm_package_config_dir_buildScripts/gulp-tasks/build-metalsmith",
     "build:cpAssets": "cp -r $npm_package_config_dir_src_assets $npm_package_config_dir_dest/.",
     "obuild:sass": "gulp sass",
     "build:sass": "run-p build:sass:*",

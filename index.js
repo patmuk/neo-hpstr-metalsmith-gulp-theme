@@ -118,6 +118,7 @@ ms
   },
   preprocess: striptags
 }))
+//if processed files (like sass) are mixed with static files (like css) use .ignore('**/*.scss')
 .use(assets({
   source: dir.source+'/assets',
   destination: 'assets',
