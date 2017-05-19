@@ -1,10 +1,11 @@
 'use strict';
 //config
 process.env.DEBUG = 'metalsmith:destination metalsmith';
-const devBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'production'),
-      debug = devBuild ? require('metalsmith-debug') : null,
-      config = require('./configuration/config'),
-      metadata = require(config.dir.config+'/metadata');
+const prodBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'production'),
+      debugBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'debug'),
+      package_json = require('./package'),
+      settings = require(package_json.config.settings),
+      metadata = require(package_json.config.metadata);
 
 const metalsmith         = require('metalsmith');
 const
@@ -29,15 +30,105 @@ const
       striptags          = require('striptags'),
       {TfIdf}            = require('natural'),
 
-      browsersync = devBuild ? require('metalsmith-browser-sync') : null,
+      browsersync = !prodBuild ? require('metalsmith-browser-sync') : null,
       sass = require('metalsmith-sass');
 
-const dir = {
-  base:   __dirname + '/',
-  lib:    __dirname + '/lib/',
-  source: './src',
-  dest:   './build'
-}
+console.log('ENV:', process.env.NODE_ENV || 'development');
+
+var ms = metalsmith(__dirname)
+.metadata(metadata);
+
+if (debugBuild) ms.use(inspect({
+  disable: false,
+  includeMetalsmith: true,
+  exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
+}));
+
+ms
+.source(package_json.config.dir.src.rootdir+'/process/contents')
+.destination(package_json.config.dir.dest)
+.clean(prodBuild)
+.use(sass())
+.use(drafts())
+.use(collections({
+  posts: {
+    sortBy: 'date',
+    reverse: true,
+  }
+}))
+.use(relations({
+  max: 3,
+  match: {
+    collection: 'posts',
+  }
+}))
+.use(
+  markdownRemarkable('full', {
+    html: true,
+    linkify: true,
+    typographer: true,
+  })
+  .use(remarkableEmoji)
+  .use(remarkableMentions())
+)
+.use(prism({
+  lineNumbers: true,
+}))
+.use(excerpts())
+.use(gravatar({
+  owner: "you@email.com",
+}))
+.use(permalinks({
+  pattern: ':title',
+  linksets: [
+    {
+      match: { collection: 'posts' },
+      pattern: ':date/:title',
+    },
+  ],
+}))
+.use(paginate({
+  path: 'page',
+}))
+.use(discoverHelpers({
+    directory: package_json.config.dir.src.rootdir+'/helpers'
+  }))
+.use(discoverPartials({
+    directory: package_json.config.dir.src.rootdir+'/partials'
+  }))
+.use(inPlace())
+.use(layouts({
+  engine: 'handlebars',
+  default: 'page.html',
+  directory: package_json.config.dir.src.rootdir+'/layouts',
+  pattern: '**/*.html'
+}))
+.use(lunr({
+  ref: 'path',
+  indexPath: 'search/index.json',
+  fields: {
+    title: 5,
+    contents: 1,
+    tags: 10,
+  },
+  preprocess: striptags
+}))
+//if processed files (like sass) are mixed with static files (like css) use .ignore('**/*.scss')
+.use(assets({
+  source: package_json.config.dir.src.rootdir+'/assets',
+  destination: 'assets',
+}));
+
+if (browsersync) ms.use(browsersync({     // start test server
+  server: package_json.config.dir.dest,
+  files:  [package_json.config.dir.src.rootdir + '/**/*']
+}));
+
+ms.build((error, files) => {
+  if(error) {
+    throw error;
+  }
+});
 
 function relations(options) {
   options = Object.assign({
@@ -95,99 +186,3 @@ function relations(options) {
     done();
   };
 }
-
-console.log('ENV:', process.env.NODE_ENV || 'development');
-
-var ms = metalsmith(__dirname)
-.metadata(metadata);
-
-if (devBuild) ms.use(debug());
-ms
-.source(dir.source+'/process')
-.destination(config.dir.dest)
-.use(sass())
-.use(inspect({
-  disable: true,
-  includeMetalsmith: true,
-  exclude: ['contents',  'excerpt', 'stats', 'next', 'previous'],
-}))
-.clean(!devBuild)
-.use(drafts())
-.use(collections({
-  posts: {
-    sortBy: 'date',
-    reverse: true,
-  }
-}))
-.use(relations({
-  max: 3,
-  match: {
-    collection: 'posts',
-  }
-}))
-.use(
-  markdownRemarkable('full', {
-    html: true,
-    linkify: true,
-    typographer: true,
-  })
-  .use(remarkableEmoji)
-  .use(remarkableMentions())
-)
-.use(prism({
-  lineNumbers: true,
-}))
-.use(excerpts())
-.use(gravatar({
-  owner: "you@email.com",
-}))
-.use(permalinks({
-  pattern: ':title',
-  linksets: [
-    {
-      match: { collection: 'posts' },
-      pattern: ':date/:title',
-    },
-  ],
-}))
-.use(paginate({
-  path: 'page',
-}))
-.use(discoverHelpers({
-    directory: dir.source+'/helpers'
-  }))
-.use(discoverPartials({
-    directory: dir.source+'/partials'
-  }))
-.use(inPlace())
-.use(layouts({
-  engine: 'handlebars',
-  default: 'page.html',
-  directory: dir.source+'/layouts',
-  pattern: '**/*.html'
-}))
-.use(lunr({
-  ref: 'path',
-  indexPath: 'search/index.json',
-  fields: {
-    title: 5,
-    contents: 1,
-    tags: 10,
-  },
-  preprocess: striptags
-}))
-.use(assets({
-  source: dir.source+'/assets',
-  destination: 'assets',
-}));
-
-if (browsersync) ms.use(browsersync({     // start test server
-  server: config.dir.dest,
-  files:  [dir.source + '/**/*']
-}));
-
-ms.build((error, files) => {
-  if(error) {
-    throw error;
-  }
-});
