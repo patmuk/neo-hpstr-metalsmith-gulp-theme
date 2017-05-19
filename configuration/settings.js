@@ -3,11 +3,11 @@ const path = require('path'),
 
 console.log(__dirname);
 //plugin settings
-//directory locations are set in package.json
+//directory locations are set in package_json.json
 module.exports = {
   browserSync: {
     // start test server
-    server: rootdir + process.env.npm_package_config_dir_dest,
+    server: rootdir + process.env.npm_package_json_config_dir_dest,
     files:  [rootdir + '/src/**/*']
   }
 };

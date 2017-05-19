@@ -4,8 +4,8 @@ const prodBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() !== 'produc
       debugBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'debug'),
 //      debug = debugBuild ? require('gulp-debug') : null,
 //      debug = debugBuild ? require('metalsmith-debug') : null;
-      package = require('../../package'),
-      metadata = require('../../'+package.config.metadata);
+      package_json = require('../../package'),
+      metadata = require('../../'+package_json.config.metadata);
 console.log("build: NODE_ENV is "+process.env.NODE_ENV);
 if(debugBuild) {process.env.DEBUG = 'metalsmith:destination metalsmith';}
 
@@ -45,12 +45,12 @@ const
       browserSync = require('browser-sync');
 
 gulp.task('clean', function () {
-  return del(package.config.dir.dest+'/**');
+  return del(package_json.config.dir.dest+'/**');
 });
 
 gulp.task('build-ms', gulp.parallel('sass', function () {
   return gulp
-  .src([package.config.dir.src.contents+'/**/*'])
+  .src([package_json.config.dir.src.contents+'/**/*'])
 // never finishes
 //  .pipe(watch([config.dir.src.content+'/**/*', '!'+config.dir.src.stylesheets+'/**/*.scss']))//incremental
     .pipe(gulp_front_matter()).on("data", function(file) {
@@ -58,7 +58,7 @@ gulp.task('build-ms', gulp.parallel('sass', function () {
         delete file.frontMatter;
     })
     .pipe(
-        gulpsmith(package.config.dir.src.rootdir)//all pathes for the plugins are relative to this dir (./src)
+        gulpsmith(package_json.config.dir.src.rootdir)//all pathes for the plugins are relative to this dir (./src)
         .metadata(metadata)
         .use(inspect({
               disable: !debugBuild,
@@ -128,7 +128,7 @@ gulp.task('build-ms', gulp.parallel('sass', function () {
             preprocess: striptags
           }))
     )
-    .pipe(gulp.dest(package.config.dir.dest))
+    .pipe(gulp.dest(package_json.config.dir.dest))
     .pipe(browserSync.stream());
 }));
 

@@ -1,11 +1,11 @@
-const package = require('../package');
+const package_json = require('../package');
 
 module.exports = {
   site: {
     // Site Info
     title: "Blog Title",
     description: "Describe your website here.",
-    url: process.env.NODE_ENV === 'production' ? package.config.publish.url : '',//'file:///'+config.dir.dest,
+    url: process.env.NODE_ENV === 'production' ? package_json.config.publish.url : '',//'file:///'+config.dir.dest,
 
     reading_time: true,
     words_per_minute: 200,

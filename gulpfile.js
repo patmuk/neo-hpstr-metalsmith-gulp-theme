@@ -1,12 +1,12 @@
 const gulp = require('gulp'),
       mocha = require('gulp-mocha'),
       requireDir = require('require-dir'),
-      package = require('./package'),
-      tasks = requireDir(package.config.dir.buildScripts+'/gulp-tasks/');
+      package_json = require('./package'),
+      tasks = requireDir(package_json.config.dir.buildScripts+'/gulp-tasks/');
 
   gulp.task('try', function (done) {
-    console.log('config: from env: '+process.env.npm_package_config_dir_buildScripts);
-    console.log('config: from require: '+package.config.dir.buildScripts);
+    console.log('config: from env: '+process.env.npm_package_json_config_dir_buildScripts);
+    console.log('config: from require: '+package_json.config.dir.buildScripts);
     done();
   });
 
