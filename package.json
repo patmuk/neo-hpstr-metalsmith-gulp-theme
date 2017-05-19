@@ -15,11 +15,6 @@
         "sass": "./src/process/contents/assets/stylesheets"
       },
       "dest": "./build"
-    },
-    "publish": {
-      "ghPagesRepo": "https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme.git",
-      "branch": "gh-pages",
-      "url": "https://patmuk.github.io/neo-hpstr-metalsmith-gulp-theme"
     }
   },
   "scripts": {

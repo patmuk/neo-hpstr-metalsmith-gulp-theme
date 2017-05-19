@@ -9,5 +9,10 @@ module.exports = {
     // start test server
     server: rootdir + process.env.npm_package_json_config_dir_dest,
     files:  [rootdir + '/src/**/*']
+  },
+  publish: {
+    ghPagesRepo: 'https://github.com/patmuk/neo-hpstr-metalsmith-gulp-theme.git',
+    branch: 'gh-pages',
+    url: 'https://patmuk.github.io/neo-hpstr-metalsmith-gulp-theme'
   }
 };
