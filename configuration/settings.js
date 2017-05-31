@@ -1,13 +1,13 @@
 const path = require('path'),
-      rootdir = path.join(__dirname, '..');
+      rootdir = path.join(__dirname, '..'),
+      package_json = require('../package');
 
-console.log(__dirname);
 //plugin settings
 //directory locations are set in package_json.json
 module.exports = {
   browserSync: {
     // start test server
-    server: rootdir + process.env.npm_package_json_config_dir_dest,
+    server: rootdir + '/' + package_json.config.dir.dest,
     files:  [rootdir + '/src/**/*']
   },
   publish: {

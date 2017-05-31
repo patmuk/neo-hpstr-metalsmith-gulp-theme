@@ -8,13 +8,13 @@
     "metadata": "./configuration/metadata",
     "dir": {
       "buildScripts": "./build-scripts",
+      "dest": "./build",
       "src": {
         "rootdir": "./src",
         "assets": "./src/assets",
         "contents": "./src/process/contents",
         "sass": "./src/process/contents/assets/stylesheets"
-      },
-      "dest": "./build"
+      }
     }
   },
   "scripts": {
