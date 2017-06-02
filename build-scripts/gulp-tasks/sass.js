@@ -7,6 +7,8 @@ const
       sass = require('gulp-sass'),
       browserSync = require('browser-sync');
 
+console.log("SASS path is: "+package_json.config.dir.src.sass+'/**/*.scss');
+
 gulp.task('sass', function(done) {
   return gulp.src(package_json.config.dir.src.sass+'/**/*.scss')
   //compile sass to css

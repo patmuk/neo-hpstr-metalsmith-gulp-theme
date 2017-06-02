@@ -4,7 +4,8 @@ const gulp = require('gulp'),
       package_json = require('./package'),
       tasks = requireDir(package_json.config.dir.buildScripts+'/gulp-tasks/');
 
-  gulp.task('default', gulp.series('build', gulp.parallel('watch')));
+  gulp.task('default', gulp.series('build', gulp.parallel('watch', 'browser-sync')));
+
   gulp.task('test', () =>
   	gulp.src('./test/**/*', {read: false})
   		// `gulp-mocha` needs filepaths so you can't have any plugins before it

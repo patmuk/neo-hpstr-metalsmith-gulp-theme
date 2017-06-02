@@ -136,13 +136,14 @@ Configure the bolg's metadata in ./configuration/metadata.js file.
 |   │   ├── scripts.hbs             # js scripts  
 |   │   └── social-share.hbs        # floating social share integration  
 |   └── process                     # files to process  
-|       ├── 404.html.hbs            # 404 page  
-|       ├── _posts                  # blog posts  
-|       ├── about/index.md          # about page  
 |       ├── assets/stylesheets      # blog style; scss to be compiled to /build/assets/stylesheets  
-|       ├── index.html.hbs          # home page  
-|       ├── posts/index.html.hbs    # archives page  
-|       └── search/index.html.hbs   # search page  
+|       └── contents                # pages, posts, ...
+|           ├── 404.html.hbs            # 404 page  
+|           ├── _posts                  # blog posts  
+|           ├── about/index.md          # about page  
+|           ├── index.html.hbs          # home page  
+|           ├── posts/index.html.hbs    # archives page  
+|           └── search/index.html.hbs   # search page  
 └── test                            # mocha tests  
     └── checkOutput.js              # test to check the resulting directory structure  
 

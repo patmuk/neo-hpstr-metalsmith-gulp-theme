@@ -5,14 +5,24 @@ const gulp = require('gulp'),
       browserSync = require('browser-sync');
 
 gulp.task('watch:sass', function() {
-  gulp.watch([package_json.config.dir.src.sass+'/*.scss', package_json.config.dir.src.sass+'/**/*.scss'], gulp.series('sass'));
+  gulp.watch(package_json.config.dir.src.sass+'/**/*.scss', gulp.series('sass'));
 });
 
-gulp.task('watch:content', function() {
-  browserSync.init(settings.browserSync);
-  gulp.watch([package_json.config.dir.src.contents+'/*', package_json.config.dir.src.contents+'/**/*', package_json.config.settings, package_json.config.metadata], gulp.series('build'));
+//posts and templates
+gulp.task('watch:ms-content', function() {
+  gulp.watch(package_json.config.dir.src.contents+'/**/*', gulp.series('build-ms'));
 //  .on('change', browserSync.reload);
 });
 
+gulp.task('watch:metadata', function() {
+  gulp.watch([package_json.config.metadata+'.js'], gulp.series('build-ms'));
+});
 
-gulp.task('watch', gulp.parallel('watch:content','watch:sass'));
+gulp.task('watch:cp-assets', function() {
+  gulp.watch([package_json.config.dir.src.assets+'/**/*'], gulp.series('cp-assets'))
+  //    .on('change', browserSync.reload);
+      .on('all', browserSync.reload);
+//  ;gulp.on('all', browserSync.reload);
+});
+
+gulp.task('watch', gulp.parallel('watch:ms-content','watch:metadata','watch:cp-assets','watch:sass'));

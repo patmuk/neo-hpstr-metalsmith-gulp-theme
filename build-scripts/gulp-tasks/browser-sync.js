@@ -1,5 +1,4 @@
 
-//obsolete, integrated in "watch.js"
 const gulp = require('gulp'),
       browserSync = require('browser-sync'),
 //      package_json = require('../../package'),
@@ -7,5 +6,5 @@ const gulp = require('gulp'),
       settings = require('../../configuration/settings');
 
 gulp.task('browser-sync', function() {
-  browserSync(settings.browserSync);
+  browserSync.init(settings.browserSync);
 });

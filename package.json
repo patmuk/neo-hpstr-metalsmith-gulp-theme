@@ -13,7 +13,8 @@
         "rootdir": "./src",
         "assets": "./src/assets",
         "contents": "./src/process/contents",
-        "sass": "./src/process/contents/assets/stylesheets"
+        "posts": "./src/process/contents/_posts",
+        "sass": "./src/process/assets/stylesheets"
       }
     }
   },
