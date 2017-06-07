@@ -4,7 +4,7 @@ const gulp = require('gulp'),
       package_json = require('./package'),
       tasks = requireDir(package_json.config.dir.buildScripts+'/gulp-tasks/');
 
-  gulp.task('default', gulp.series('build', gulp.parallel('watch', 'browser-sync')));
+  gulp.task('default', gulp.series('build', gulp.parallel('watch', 'bs_serve')));
 
   gulp.task('test', () =>
   	gulp.src('./test/**/*', {read: false})

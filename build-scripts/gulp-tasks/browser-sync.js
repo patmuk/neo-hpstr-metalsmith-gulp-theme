@@ -1,10 +1,16 @@
 
 const gulp = require('gulp'),
       browserSync = require('browser-sync'),
-//      package_json = require('../../package'),
-//      settings = require('../../'+package_json.config.settings);
       settings = require('../../configuration/settings');
 
-gulp.task('browser-sync', function() {
-  browserSync.init(settings.browserSync);
+const server = browserSync.create();
+
+gulp.task('bs_serve', function (done) {
+  server.init(settings.browserSync);
+  done();
+});
+
+gulp.task('bs_reload', function (done) {
+  server.reload();
+  done();
 });

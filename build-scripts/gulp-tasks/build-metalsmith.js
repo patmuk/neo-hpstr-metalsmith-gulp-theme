@@ -4,8 +4,8 @@ const prodBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'product
       debugBuild = ((process.env.NODE_ENV || '').trim().toLowerCase() == 'debug'),
 //      debug = debugBuild ? require('gulp-debug') : null,
 //      debug = debugBuild ? require('metalsmith-debug') : null;
-      package_json = require('../../package'),
-      metadata = require('../../'+package_json.config.metadata);
+      package_json = require('../../package');
+const importFresh = require('import-fresh');//to import a module (here:metadata) without cache
 console.log("build: NODE_ENV is "+process.env.NODE_ENV);
 if(debugBuild) {process.env.DEBUG = 'metalsmith:destination metalsmith';}
 
@@ -50,16 +50,18 @@ gulp.task('clean', function () {
 
 gulp.task('build-ms', function () {
   return gulp
-  .src([package_json.config.dir.src.contents+'/**/*', '!'+package_json.config.dir.src.sass+'/**/*'])
-// never finishes
+  .src([package_json.config.dir.src.contents+'/**/*', '!'+package_json.config.dir.src.sass+'/**/*'
+,package_json.config.metadata+'.js'
+])
+// never finishes:
 //  .pipe(watch([config.dir.src.content+'/**/*', '!'+config.dir.src.stylesheets+'/**/*.scss']))//incremental
     .pipe(gulp_front_matter()).on("data", function(file) {
         assign(file, file.frontMatter);
         delete file.frontMatter;
     })
     .pipe(
-        gulpsmith(package_json.config.dir.src.rootdir)//all pathes for the plugins are relative to this dir (./src)
-        .metadata(metadata)
+        gulpsmith(package_json.config.dir.rootdir)//all pathes for the plugins are relative to this dir (./.)
+        .metadata(importFresh('../../'+package_json.config.metadata))
         .use(inspect({
               disable: !debugBuild,
               includeMetalsmith: true,
@@ -106,16 +108,16 @@ gulp.task('build-ms', function () {
             path: 'page',
           }))
         .use(discoverHelpers({
-          directory: 'helpers'
+          directory: package_json.config.dir.src.templates+'/helpers'
         }))
         .use(discoverPartials({
-          directory: 'partials'
+          directory: package_json.config.dir.src.templates+'/partials'
         }))
         .use(inPlace())
         .use(layouts({
           engine: 'handlebars',
           default: 'page.html',
-          directory: 'layouts',
+          directory: package_json.config.dir.src.templates+'/layouts',
         }))
         .use(lunr({
             ref: 'path',
@@ -128,8 +130,7 @@ gulp.task('build-ms', function () {
             preprocess: striptags
           }))
     )
-    .pipe(gulp.dest(package_json.config.dir.dest))
-    .pipe(browserSync.stream());
+    .pipe(gulp.dest(package_json.config.dir.dest));
 });
 
 function relations(options) {

@@ -3,7 +3,7 @@ const settings = require('./settings');
 module.exports = {
   site: {
     // Site Info
-    title: "Blog Titles",
+    title: "Blog Title",
     description: "Describe your website here.",
     url: process.env.NODE_ENV === 'production' ? settings.publish.url : '',//'file:///'+config.dir.dest,
 
