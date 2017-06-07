@@ -11,6 +11,6 @@ gulp.task('bs_serve', function (done) {
 });
 
 gulp.task('bs_reload', function (done) {
-  server.reload();
+  server.reload({stream: false});
   done();
 });

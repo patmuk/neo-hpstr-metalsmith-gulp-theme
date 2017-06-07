@@ -14,7 +14,7 @@ gulp.task('watch:ms-content', function() {
 });
 
 gulp.task('watch:metadata', function() {
-  gulp.watch([package_json.config.metadata+'.js'], gulp.series('build-ms','bs_reload'));
+  gulp.watch(package_json.config.metadata+'.js', gulp.series('build-ms','bs_reload'));
 });
 
 gulp.task('watch:templates', function() {
@@ -26,7 +26,7 @@ gulp.task('watch:templates', function() {
 });
 
 gulp.task('watch:cp-assets', function() {
-  gulp.watch([package_json.config.dir.src.assets+'/**/*'], gulp.series('cp-assets', 'bs_reload'));
+  gulp.watch(package_json.config.dir.src.assets+'/**/*', gulp.series('cp-assets', 'bs_reload'));
 });
 
 gulp.task('watch', gulp.parallel('watch:ms-content','watch:metadata','watch:templates','watch:cp-assets','watch:sass'));
